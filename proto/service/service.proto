@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package service;
 
+option go_package = "github.com/abu-umair/ecommerce-go-grpc-be/pb/service";
+
 service HelloWorldService {
   rpc HelloWorld(HelloWorldRequest) returns (HelloWorldResponse);
 }
