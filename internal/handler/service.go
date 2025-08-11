@@ -6,7 +6,9 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
 )
 
-type IServiceHandler interface{}
+type IServiceHandler interface {
+	HelloWorld(ctx context.Context, request *service.HelloWorldRequest) (*service.HelloWorldResponse, error)
+}
 
 type serviceHandler struct {
 	service.UnimplementedHelloWorldServiceServer
