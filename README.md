@@ -18,4 +18,6 @@ go get google.golang.org/grpc
 ```bash
 go run main.go
 
-```
+4. membuat koleksi proto (didalam folder proto, kemudian membuat service proto)
+
+
