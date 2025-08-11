@@ -8,3 +8,14 @@
 go mod init github.com/abu-umair/ecommerce-go-grpc-be
 
 ```
+2. Mendownload Library gRpc (otomatis download library)
+```bash
+go get google.golang.org/grpc
+
+```
+
+3. Run Server
+```bash
+go run main.go
+
+```
