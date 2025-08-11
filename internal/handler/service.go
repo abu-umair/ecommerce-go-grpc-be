@@ -7,10 +7,6 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
 )
 
-type IServiceHandler interface {
-	HelloWorld(ctx context.Context, request *service.HelloWorldRequest) (*service.HelloWorldResponse, error)
-}
-
 type serviceHandler struct {
 	service.UnimplementedHelloWorldServiceServer
 }
@@ -22,6 +18,6 @@ func (sh *serviceHandler) HelloWorld(ctx context.Context, request *service.Hello
 	}, nil
 }
 
-func NewServiceHandler() IServiceHandler {
+func NewServiceHandler() *serviceHandler {
 	return &serviceHandler{}
 }
