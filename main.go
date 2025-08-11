@@ -7,6 +7,7 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/handler"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() { //?Sebagai gRpc server
@@ -20,6 +21,9 @@ func main() { //?Sebagai gRpc server
 	serv := grpc.NewServer()
 
 	service.RegisterHelloWorldServiceServer(serv, serviceHandler)
+
+	reflection.Register(serv)
+	log.Println("Reflection is registered")
 
 	log.Println("Server is running on :50051 port")
 	if err := serv.Serve(lis); err != nil {
