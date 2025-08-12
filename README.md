@@ -34,3 +34,7 @@ go get github.com/joho/godotenv
 go run main.go
 ```
 8. mengecek di Postman dengan pilihan gRpc
+
+### Setup Database
+#### History Steps
+1. Setting supabase dan .env
