@@ -1,10 +1,22 @@
 package database
 
-import "database/sql"
+import (
+	"context"
+	"database/sql"
 
-func ConnectDB(connStr string) *sql.DB { //?menerima sebua string dan mengembalikan sql.DB
+	_ "github.com/lib/pq"
+)
+
+//? '_' ingin side effect (apa yang dilakukan pada package) dari import
+
+func ConnectDB(ctx context.Context, connStr string) *sql.DB { //?menerima sebua string dan mengembalikan sql.DB
 	{
 		db, err := sql.Open("postgres", connStr) //?membuka koneksi ke database, mereturn db, err
+		if err != nil {
+			panic(err)
+		}
+
+		err = db.PingContext(ctx)
 		if err != nil {
 			panic(err)
 		}

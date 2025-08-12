@@ -38,3 +38,8 @@ go run main.go
 ### Setup Database
 #### History Steps
 1. Setting supabase dan .env
+2. menambahkan package driver postgres (https://github.com/lib/pq)
+```bash
+go get github.com/lib/pq
+
+```
