@@ -43,3 +43,7 @@ go run main.go
 go get github.com/lib/pq
 
 ```
+3. Run Server
+```bash
+go run main.go
+```

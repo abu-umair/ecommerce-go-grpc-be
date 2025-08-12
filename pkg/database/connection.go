@@ -4,10 +4,8 @@ import (
 	"context"
 	"database/sql"
 
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" //? '_' ingin side effect (apa yang dilakukan pada package) dari import
 )
-
-//? '_' ingin side effect (apa yang dilakukan pada package) dari import
 
 func ConnectDB(ctx context.Context, connStr string) *sql.DB { //?menerima sebua string dan mengembalikan sql.DB
 	{
