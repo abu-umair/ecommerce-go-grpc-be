@@ -24,6 +24,7 @@ func main() { //?Sebagai gRpc server
 	}
 
 	database.ConnectDB(ctx, os.Getenv("DB_URI"))
+	log.Println("Database is connected")
 
 	serviceHandler := handler.NewServiceHandler()
 
