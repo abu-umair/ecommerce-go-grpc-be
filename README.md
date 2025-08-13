@@ -47,3 +47,6 @@ go get github.com/lib/pq
 ```bash
 go run main.go
 ```
+
+### Setup Error Middleware
+#### History Steps

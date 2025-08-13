@@ -14,6 +14,12 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+func errorMiddleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+	res, err := handler(ctx, req) //?memanggil handler disertai dengan context dan requestnya
+
+	return res, err
+}
+
 func main() { //?Sebagai gRpc server
 	ctx := context.Background()
 	godotenv.Load()
@@ -28,7 +34,11 @@ func main() { //?Sebagai gRpc server
 
 	serviceHandler := handler.NewServiceHandler()
 
-	serv := grpc.NewServer()
+	serv := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(
+			errorMiddleware, //?memasukkan func error middleware
+		),
+	)
 
 	service.RegisterHelloWorldServiceServer(serv, serviceHandler)
 
