@@ -5,30 +5,15 @@ import (
 	"log"
 	"net"
 	"os"
-	"runtime/debug"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/handler"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
+	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/grpcmiddleware"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
-	"google.golang.org/grpc/status"
 )
-
-func errorMiddleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			log.Println(r)
-			debug.PrintStack() //? menampilkan stack trace (menampilkan error di console)
-			err = status.Errorf(codes.Internal, "Internal Server Error") //? memasang status internal
-		}
-	}()
-	res, err := handler(ctx, req) //?memanggil handler disertai dengan context dan requestnya
-
-	return res, err
-}
 
 func main() { //?Sebagai gRpc server
 	ctx := context.Background()
@@ -47,7 +32,7 @@ func main() { //?Sebagai gRpc server
 	serv := grpc.NewServer(
 
 		grpc.ChainUnaryInterceptor(
-			errorMiddleware, //?memasukkan func error middleware
+			grpcmiddleware.ErrorMiddleware, //?memasukkan func error middleware
 		),
 	)
 

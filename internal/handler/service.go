@@ -14,7 +14,7 @@ type serviceHandler struct {
 
 // * membuat methode untuk service handler
 func (sh *serviceHandler) HelloWorld(ctx context.Context, request *service.HelloWorldRequest) (*service.HelloWorldResponse, error) {
-	panic(errors.New("not implemented"))
+	panic(errors.New("not implemented")) //?testing error
 	return &service.HelloWorldResponse{
 		Message: fmt.Sprintf("Hello %s", request.Name),
 	}, nil
