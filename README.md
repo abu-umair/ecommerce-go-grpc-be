@@ -62,4 +62,7 @@ go run main.go
 
 ### Setup Response Wrapper
 #### History Steps
-
+1. Generate base_response
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative common/base_response.proto
+```
