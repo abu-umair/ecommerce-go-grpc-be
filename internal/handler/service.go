@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/abu-umair/ecommerce-go-grpc-be/pb/common"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
 )
 
@@ -16,6 +17,10 @@ func (sh *serviceHandler) HelloWorld(ctx context.Context, request *service.Hello
 	// panic(errors.New("not implemented")) //?testing error
 	return &service.HelloWorldResponse{
 		Message: fmt.Sprintf("Hello %s", request.Name),
+		Base: &common.BaseResponse{
+			StatusCode: 200,
+			Message:    "Success",
+		},
 	}, nil
 }
 
