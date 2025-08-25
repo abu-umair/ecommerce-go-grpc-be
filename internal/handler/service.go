@@ -2,6 +2,7 @@ package handler //*nama package handler
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
@@ -13,6 +14,7 @@ type serviceHandler struct {
 
 // * membuat methode untuk service handler
 func (sh *serviceHandler) HelloWorld(ctx context.Context, request *service.HelloWorldRequest) (*service.HelloWorldResponse, error) {
+	panic(errors.New("not implemented"))
 	return &service.HelloWorldResponse{
 		Message: fmt.Sprintf("Hello %s", request.Name),
 	}, nil
