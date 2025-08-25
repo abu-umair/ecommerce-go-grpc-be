@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"runtime/debug"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/handler"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
@@ -20,8 +21,8 @@ func errorMiddleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, h
 	defer func() {
 		if r := recover(); r != nil {
 			log.Println(r)
-
-			err = status.Errorf(codes.Internal, "Internal Server Error")//? memasang status internal
+			debug.PrintStack() //? menampilkan stack trace (menampilkan error di console)
+			err = status.Errorf(codes.Internal, "Internal Server Error") //? memasang status internal
 		}
 	}()
 	res, err := handler(ctx, req) //?memanggil handler disertai dengan context dan requestnya

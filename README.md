@@ -54,3 +54,8 @@ go run main.go
 ```bash
 go run main.go
 ```
+
+2. Run Server
+```bash
+go run main.go
+```
