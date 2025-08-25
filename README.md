@@ -50,3 +50,7 @@ go run main.go
 
 ### Setup Error Middleware
 #### History Steps
+1. Run Server
+```bash
+go run main.go
+```

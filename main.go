@@ -11,10 +11,19 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
 
 func errorMiddleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println(r)
+
+			err = status.Errorf(codes.Internal, "Internal Server Error")//? memasang status internal
+		}
+	}()
 	res, err := handler(ctx, req) //?memanggil handler disertai dengan context dan requestnya
 
 	return res, err
@@ -24,7 +33,7 @@ func main() { //?Sebagai gRpc server
 	ctx := context.Background()
 	godotenv.Load()
 
-	lis, err := net.Listen("tcp", ":50051") //? mengembalikan 2 value yaitu listener dan error
+	lis, err := net.Listen("tcp", ":50052") //? mengembalikan 2 value yaitu listener dan error
 	if err != nil {
 		log.Panicf("Error when listening %v", err)
 	}
@@ -35,6 +44,7 @@ func main() { //?Sebagai gRpc server
 	serviceHandler := handler.NewServiceHandler()
 
 	serv := grpc.NewServer(
+
 		grpc.ChainUnaryInterceptor(
 			errorMiddleware, //?memasukkan func error middleware
 		),
@@ -47,7 +57,7 @@ func main() { //?Sebagai gRpc server
 		log.Println("Reflection is registered")
 	}
 
-	log.Println("Server is running on :50051 port")
+	log.Println("Server is running on :50052 port")
 	if err := serv.Serve(lis); err != nil {
 		log.Panicf("Server is error %v", err)
 	}
