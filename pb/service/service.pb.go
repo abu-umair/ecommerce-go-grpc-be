@@ -7,6 +7,7 @@
 package service
 
 import (
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	common "github.com/abu-umair/ecommerce-go-grpc-be/pb/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -24,7 +25,7 @@ const (
 
 type HelloWorldRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"` //?membuat validasi
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -122,9 +123,10 @@ var File_service_service_proto protoreflect.FileDescriptor
 
 const file_service_service_proto_rawDesc = "" +
 	"\n" +
-	"\x15service/service.proto\x12\aservice\x1a\x1acommon/base_response.proto\"'\n" +
-	"\x11HelloWorldRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"X\n" +
+	"\x15service/service.proto\x12\aservice\x1a\x1acommon/base_response.proto\x1a\x1bbuf/validate/validate.proto\"3\n" +
+	"\x11HelloWorldRequest\x12\x1e\n" +
+	"\x04name\x18\x01 \x01(\tB\n" +
+	"\xbaH\ar\x05\x10\x01\x18\xff\x01R\x04name\"X\n" +
 	"\x12HelloWorldResponse\x12(\n" +
 	"\x04base\x18\x01 \x01(\v2\x14.common.BaseResponseR\x04base\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage2Z\n" +

@@ -90,3 +90,8 @@ https://buf.build/bufbuild/protovalidate/docs/main:buf.validate
 ```
 
 3. Ketinggalan import di service
+
+4. Generate ulang service proto
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative service/service.proto
+```
