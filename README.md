@@ -83,3 +83,8 @@ go run main.go
 ```bash
 https://github.com/bufbuild/protovalidate/blob/main/proto/protovalidate/buf/validate/validate.proto
 ```
+
+2. Menambahkan validasi (dokumentasi dibawah ini)
+```bash
+https://buf.build/bufbuild/protovalidate/docs/main:buf.validate
+``
