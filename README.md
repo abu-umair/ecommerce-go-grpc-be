@@ -76,3 +76,10 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ```bash
 go run main.go
 ```
+
+### Setup Validation Error
+#### History Steps
+1. menggunakan validate github (copas filenya ke proto\buf\validate\validate.proto)
+```bash
+https://github.com/bufbuild/protovalidate/blob/main/proto/protovalidate/buf/validate/validate.proto
+```
