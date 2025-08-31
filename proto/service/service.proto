@@ -5,6 +5,7 @@ package service;
 option go_package = "github.com/abu-umair/ecommerce-go-grpc-be/pb/service";
 
 import "common/base_response.proto";
+import "buf/validate/validate.proto";
 
 service HelloWorldService {
   rpc HelloWorld(HelloWorldRequest) returns (HelloWorldResponse);

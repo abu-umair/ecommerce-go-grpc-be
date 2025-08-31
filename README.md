@@ -87,4 +87,6 @@ https://github.com/bufbuild/protovalidate/blob/main/proto/protovalidate/buf/vali
 2. Menambahkan validasi (dokumentasi dibawah ini)
 ```bash
 https://buf.build/bufbuild/protovalidate/docs/main:buf.validate
-``
+```
+
+3. Ketinggalan import di service
