@@ -95,3 +95,12 @@ https://buf.build/bufbuild/protovalidate/docs/main:buf.validate
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative service/service.proto
 ```
+
+5. Mendownload package berikut
+```bash
+go get github.com/bufbuild/protovalidate-go
+```
+jika gagal
+```bash
+go get buf.build/go/protovalidate
+```
