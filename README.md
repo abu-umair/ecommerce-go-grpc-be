@@ -104,3 +104,9 @@ jika gagal
 ```bash
 go get buf.build/go/protovalidate
 ```
+
+6. Run Server
+```bash
+go run main.go
+```
+7. Test Postman

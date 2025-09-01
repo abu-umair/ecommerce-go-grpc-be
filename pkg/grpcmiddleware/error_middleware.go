@@ -22,7 +22,8 @@ func ErrorMiddleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, h
 
 	if err != nil {
 		log.Println(err)
-		return nil, status.Error(codes.Internal, "Internal Server Error")
+		// return nil, status.Error(codes.Internal, "Internal Server Error")//?sementara dihidden
+		return nil, err //? melihat errornya di postman
 	}
 
 	return res, err
