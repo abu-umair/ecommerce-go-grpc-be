@@ -17,7 +17,7 @@ type serviceHandler struct {
 
 // * membuat methode untuk service handler
 func (sh *serviceHandler) HelloWorld(ctx context.Context, request *service.HelloWorldRequest) (*service.HelloWorldResponse, error) {
-	 //? validasi request
+	//? validasi request
 	if err := protovalidate.Validate(request); //?validator.Validate(request) cek request sesuai aturan di .proto.
 	err != nil {                               //?jika ada error maka akan mereturn error Analogi Laravel → mirip kalau kita bikin custom validator class lalu panggil Validator::make($data, $rules).
 		var validationError *protovalidate.ValidationError //?Kalau gagal → return *protovalidate.ValidationError.
