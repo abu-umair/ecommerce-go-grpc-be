@@ -28,4 +28,12 @@ func CheckValidation(req proto.Message) ([]*common.ValidationError, error) {
 		return nil, err
 
 	}
+
+	return make([]*common.ValidationError, 0), nil //?"validasi sukses, tidak ada error".
+	//?analogi:
+	//?  $validated = $request->validate([
+	//? 	'name' => 'required',
+	//? 	'email' => 'required|email',
+	//? ]);
+	//? Kalau berhasil → $validated berisi data, dan $errors kosong.
 }
