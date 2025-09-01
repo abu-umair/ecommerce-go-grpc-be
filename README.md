@@ -115,3 +115,8 @@ go run main.go
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative common/base_response.proto
 ```
+
+9. Run Server
+```bash
+go run main.go
+```

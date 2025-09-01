@@ -14,6 +14,13 @@ service HelloWorldService {
 message HelloWorldRequest {
   string name = 1 [(buf.validate.field).string = {min_len: 1, max_len: 255}]; //?membuat validasi
 }
+// Laravel: rules ditulis di PHP.
+// Go: rules ditulis di .proto, otomatis berlaku di semua bahasa (Go, TS, Java, dll).
+//?seperti
+// $request->validate([
+//     'name' => 'required|string|min:3|max:255',
+//     'email' => 'required|email|unique:users',
+// ]);
 
 message HelloWorldResponse {
   common.BaseResponse base = 1; //?menambahkan common.BaseResponse
