@@ -110,3 +110,8 @@ go get buf.build/go/protovalidate
 go run main.go
 ```
 7. Test Postman
+
+8. Generate ulang base_response
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative common/base_response.proto
+```
