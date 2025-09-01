@@ -5,7 +5,6 @@ import (
 
 	"buf.build/go/protovalidate"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/common"
-	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -24,14 +23,7 @@ func CheckValidation(req proto.Message) ([]*common.ValidationError, error) {
 					Message: *violation.Proto.Message,                     //?Message → mirip pesan error di Laravel (The name field is required.).
 				})
 			}
-			return &service.HelloWorldResponse{
-				Base: &common.BaseResponse{
-					ValidationError: validationErrorResponse,
-					StatusCode:      400,
-					Message:         "Validation Error",
-					IsError:         true,
-				},
-			}, nil
+			return validationErrorResponse, nil
 		}
 		return nil, err
 
