@@ -120,3 +120,8 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ```bash
 go run main.go
 ```
+
+9. Run ulang Server
+```bash
+go run main.go
+```

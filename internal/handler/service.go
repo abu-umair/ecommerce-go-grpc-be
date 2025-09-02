@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
-	"github.com/abu-umair/ecommerce-go-grpc-be/pb/common"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
 )
 
@@ -17,18 +16,13 @@ type serviceHandler struct {
 func (sh *serviceHandler) HelloWorld(ctx context.Context, request *service.HelloWorldRequest) (*service.HelloWorldResponse, error) {
 	//? validasi request
 	validationErrors, err := utils.CheckValidation(request) //?mirip Validator::make($request->all(), $rules)
-	if err != nil { //?mirip if ($validator->fails())
+	if err != nil {                                         //?mirip if ($validator->fails())
 		return nil, err
 	}
 
 	if validationErrors != nil {
 		return &service.HelloWorldResponse{
-			Base: &common.BaseResponse{
-				StatusCode:      400,
-				Message:         "Validation error",
-				IsError:         true,
-				ValidationError: validationErrors, //?mirip return JSON $validator->errors()->toArray()
-			},
+			Base: utils.ValidationErrorResponse(validationErrors), //? memindahkan ke sebuah file agar clean dan bisa di reuse
 		}, nil
 	}
 
