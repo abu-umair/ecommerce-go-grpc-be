@@ -129,3 +129,16 @@ go run main.go
 ## E-Commerce Project - Autentikasi
 ### API Registrasi User
 #### History Steps
+1. Generate auth.proto nya
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative auth/auth.proto
+
+```
+
+2. Setelah generate, lihat file di 
+```bash
+auth/auth_grpc.pb.go
+auth/auth.pb.go
+```
+ke 2 file tersebut di save, kemudian dilihat ada erorr atau tidak, jika tidak ada maka aman
+
