@@ -27,7 +27,7 @@ func (as *authService) Register(ctx context.Context, request *auth.RegisterReque
 		}, nil
 	}
 	user, err := as.authRepository.GetUserByEmail(ctx, request.Email)
-	if err != nil || user == nil {
+	if err != nil {
 		return nil, err
 	}
 

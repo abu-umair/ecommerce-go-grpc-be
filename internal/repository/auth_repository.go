@@ -46,7 +46,7 @@ func (ar *authRepository) GetUserByEmail(ctx context.Context, email string) (*en
 func (ar *authRepository) InsertUser(ctx context.Context, user *entity.User) error {
 	_, err := ar.db.ExecContext(
 		ctx,
-		`INSERT INTO \"user\" (id, full_name, email, password, role_code, created_at, created_by, updated_at, updated_by, deleted_at,deleted_by, is_deleted)
+		`INSERT INTO "user" (id, full_name, email, password, role_code, created_at, created_by, updated_at, updated_by, deleted_at,deleted_by, is_deleted)
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
 
 		user.Id,
@@ -59,6 +59,7 @@ func (ar *authRepository) InsertUser(ctx context.Context, user *entity.User) err
 		user.UpdatedAt,
 		user.UpdatedBy,
 		user.DeletedAt,
+		user.DeletedBy,
 		user.IsDeleted,
 	)
 
