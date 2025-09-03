@@ -125,3 +125,7 @@ go run main.go
 ```bash
 go run main.go
 ```
+
+## E-Commerce Project - Autentikasi
+### API Registrasi User
+#### History Steps
