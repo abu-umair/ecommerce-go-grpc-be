@@ -142,3 +142,23 @@ auth/auth.pb.go
 ```
 ke 2 file tersebut di save, kemudian dilihat ada erorr atau tidak, jika tidak ada maka aman
 
+
+3. install bcrypt
+```bash
+go get golang.org/x/crypto/bcrypt
+```
+
+4. install UUID
+```bash
+go get github.com/google/uuid
+```
+
+5. jalankan tidy
+```bash
+go mod tidy
+```
+
+6. Run Server
+```bash
+go run main.go
+```

@@ -7,7 +7,9 @@ import (
 	"os"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/handler"
-	"github.com/abu-umair/ecommerce-go-grpc-be/pb/service"
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/service"
+	"github.com/abu-umair/ecommerce-go-grpc-be/pb/auth"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/grpcmiddleware"
 	"github.com/joho/godotenv"
@@ -24,10 +26,12 @@ func main() { //?Sebagai gRpc server
 		log.Panicf("Error when listening %v", err)
 	}
 
-	database.ConnectDB(ctx, os.Getenv("DB_URI"))
+	db := database.ConnectDB(ctx, os.Getenv("DB_URI"))
 	log.Println("Database is connected")
 
-	serviceHandler := handler.NewServiceHandler()
+	authRepository := repository.NewAuthRepository(db)
+	authService := service.NewAuthService(authRepository)
+	authHandler := handler.NewAuthHandler(authService)
 
 	serv := grpc.NewServer(
 
@@ -36,7 +40,7 @@ func main() { //?Sebagai gRpc server
 		),
 	)
 
-	service.RegisterHelloWorldServiceServer(serv, serviceHandler)
+	auth.RegisterAuthServiceServer(serv, authHandler)
 
 	if os.Getenv("ENVIRONMENT") == "dev" {
 		reflection.Register(serv)
