@@ -86,7 +86,7 @@ func NewAuthService(authRepository repository.IAuthRepository) IAuthService {
 
 ## analogi Laravel
 ### AuthService.php
-```bash
+```php
 // App\Services\AuthService.php
 class AuthService {
     public function register(array $data) {

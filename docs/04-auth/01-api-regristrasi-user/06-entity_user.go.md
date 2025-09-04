@@ -36,7 +36,7 @@ type User struct {
 
 ## analogi Laravel
 ### Models\User.php
-```bash
+```php
 // App\Models\User.php
 class User extends Model {
     protected $fillable = [

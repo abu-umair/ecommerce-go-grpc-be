@@ -76,7 +76,7 @@ func NewAuthRepository(db *sql.DB) IAuthRepository {
 
 ## analogi Laravel
 ### Models\User.php
-```bash
+```php
 // App\Models\User.php
 class User extends Model {
     protected $fillable = ['id','full_name','email','password','role_code','created_at','created_by'];
@@ -85,7 +85,7 @@ class User extends Model {
 ```
 
 ### Example
-```bash
+```php
 User::where('email', $email)->first();
 User::create($data);
 

@@ -68,7 +68,7 @@ func main() {
 
 ## analogi Laravel
 ### index.php
-```bash
+```php
 $app = require_once __DIR__.'/../bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
@@ -80,7 +80,7 @@ $kernel->terminate($request, $response);
 ```
 
 ### routes/api.php
-```bash
+```php
 Route::post('/auth/register', [AuthController::class, 'register']);
 
 ```

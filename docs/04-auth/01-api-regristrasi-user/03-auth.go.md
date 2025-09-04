@@ -57,7 +57,7 @@ func NewAuthHandler(authService service.IAuthService) *authHandler {
 ## analogi Laravel
 ### AuthController.php
 
-```bash
+```php
 // App\Http\Controllers\AuthController.php
 class AuthController extends Controller {
     public function register(Request $request) {
