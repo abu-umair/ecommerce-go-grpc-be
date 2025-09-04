@@ -15,6 +15,7 @@
 // gRPC: implementasi AuthService.Register() di auth.go.  
 // Laravel: AuthController@register.  
 // main.go bukan bagian flow request → response → dia cuma nyalain server & daftarin handler.
+
 ---
 
 ## 4. Validasi
