@@ -1,4 +1,4 @@
-# Flow Registrasi User (dengan .proto)
+# Flow Registrasi User 
 ## 1. Definisi kontrak di .proto
 // Sebelum ada Controller atau Repository, kita tulis dulu service, request, dan response di .proto.  
 // Laravel tidak ada step ini, langsung bikin Route + Controller.
@@ -13,8 +13,8 @@
 
 ## 3. Handler Layer
 // gRPC: implementasi AuthService.Register() di auth.go.  
-// Laravel: AuthController@register.
-
+// Laravel: AuthController@register.  
+// main.go bukan bagian flow request → response → dia cuma nyalain server & daftarin handler.
 ---
 
 ## 4. Validasi
@@ -48,3 +48,5 @@ Client → .proto (kontrak) → Handler → Service → Repository → Database 
 
 ## Laravel
 Client → Route → Controller → Service (opsional) → Model → Database → Response
+
+---
