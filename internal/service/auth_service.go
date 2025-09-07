@@ -9,11 +9,11 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/auth"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	
 )
 
 type IAuthService interface {
@@ -95,6 +95,22 @@ func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*
 	return nil, err
 
 	//* generate jwt
+	now := time.Now()
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, entity.JwtClaims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject:   user.Id,
+			ExpiresAt: jwt.NewNumericDate(now.Add(time.Hour * 24)),
+			IssuedAt:  jwt.NewNumericDate(now),
+		},
+		Email:    user.Email,
+		FullName: user.FullName,
+		Role:     user.RoleCode,
+	})
+	secretKey := "testingssecretkey"
+	accessToken, err := token.SignedString([]byte(secretKey))
+	if err != nil {
+		return nil, err
+	}
 
 	//* kirim response
 

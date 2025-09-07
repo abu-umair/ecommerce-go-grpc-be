@@ -1,4 +1,6 @@
-import "github.com/golang/jwt/jwt/v5"
+package entity
+
+import "github.com/golang-jwt/jwt/v5"
 
 type JwtClaims struct {
 	jwt.RegisteredClaims
