@@ -90,9 +90,8 @@ func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*
 		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
 			return nil, status.Errorf(codes.Unauthenticated, "Unauthenticated")
 		}
+		return nil, err
 	}
-
-	return nil, err
 
 	//* generate jwt
 	now := time.Now()

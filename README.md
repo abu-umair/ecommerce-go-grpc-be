@@ -175,3 +175,8 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ```bash
 go get github.com/golang-jwt/jwt/v5
 ```
+
+3. Run Server
+```bash
+go run main.go
+```
