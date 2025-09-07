@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
@@ -10,6 +11,8 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/auth"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type IAuthService interface {
@@ -81,6 +84,14 @@ func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*
 	}
 
 	//* check apakah password sama dengan password di database
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(request.Password))
+	if err != nil {
+		if errors.Is(err, bcrypt.ErrMismatchedHashAndPassword) {
+			return nil, status.Errorf(codes.Unauthenticated, "Unauthenticated")
+		}
+	}
+
+	return nil, err
 
 	//* generate jwt
 
