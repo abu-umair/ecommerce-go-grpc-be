@@ -36,3 +36,14 @@ message RegisterRequest { //?RegisterRequest = FormRequest di Laravel (buat vali
 message RegisterResponse { //? RegisterResponse = JsonResponse atau Resource di Laravel (buat return response).
   common.BaseResponse base = 1;
 }
+
+// Login
+message LoginRequest { 
+  string email = 1 [(buf.validate.field).string = { email: true, min_len: 1, max_len: 255 }];
+  string password = 2 [(buf.validate.field).string = { min_len: 1, max_len: 255 }];
+}
+
+message LoginResponse { 
+  common.BaseResponse base = 1;
+  string access_token = 2;
+}
