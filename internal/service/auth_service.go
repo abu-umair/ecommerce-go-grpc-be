@@ -21,10 +21,6 @@ type authService struct {
 	authRepository repository.IAuthRepository
 }
 
-// Login implements IAuthService.
-func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error) {
-	panic("unimplemented")
-}
 
 func (as *authService) Register(ctx context.Context, request *auth.RegisterRequest) (*auth.RegisterResponse, error) {
 	if request.Password != request.PasswordConfirmation {
@@ -68,6 +64,11 @@ func (as *authService) Register(ctx context.Context, request *auth.RegisterReque
 	return &auth.RegisterResponse{
 		Base: utils.SuccessResponse("User is registered"),
 	}, nil
+}
+
+// Login implements IAuthService.
+func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error) {
+	panic("unimplemented")
 }
 
 func NewAuthService(authRepository repository.IAuthRepository) IAuthService {
