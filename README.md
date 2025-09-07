@@ -170,3 +170,8 @@ go run main.go
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative auth/auth.proto
 
 ```
+
+2. install golang jwt
+```bash
+go get github.com/golang-jwt/jwt/v5
+```
