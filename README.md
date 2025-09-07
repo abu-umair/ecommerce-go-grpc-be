@@ -165,3 +165,8 @@ go run main.go
 
 ### API Login
 #### History Steps
+1. Generate ulang auth.proto nya
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative auth/auth.proto
+
+```
