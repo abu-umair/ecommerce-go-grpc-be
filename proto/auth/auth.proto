@@ -10,6 +10,7 @@ option go_package = "github.com/abu-umair/ecommerce-go-grpc-be/pb/auth";
 //? sama kayak kamu bikin AuthController dengan method register(Request $request).
 service AuthService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse); //?menambahkan service baru
 }
 
 message RegisterRequest { //?RegisterRequest = FormRequest di Laravel (buat validasi).
