@@ -14,10 +14,16 @@ import (
 
 type IAuthService interface {
 	Register(ctx context.Context, request *auth.RegisterRequest) (*auth.RegisterResponse, error)
+	Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error)
 }
 
 type authService struct {
 	authRepository repository.IAuthRepository
+}
+
+// Login implements IAuthService.
+func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error) {
+	panic("unimplemented")
 }
 
 func (as *authService) Register(ctx context.Context, request *auth.RegisterRequest) (*auth.RegisterResponse, error) {
