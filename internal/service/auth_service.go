@@ -21,7 +21,6 @@ type authService struct {
 	authRepository repository.IAuthRepository
 }
 
-
 func (as *authService) Register(ctx context.Context, request *auth.RegisterRequest) (*auth.RegisterResponse, error) {
 	if request.Password != request.PasswordConfirmation {
 		return &auth.RegisterResponse{
@@ -66,9 +65,15 @@ func (as *authService) Register(ctx context.Context, request *auth.RegisterReque
 	}, nil
 }
 
-// Login implements IAuthService.
 func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error) {
-	panic("unimplemented")
+	//? implement logic dari loginnya
+	//* check apakah email ada di database
+
+	//* check apakah password sama dengan password di database
+	
+	//* generate jwt
+	
+	//* kirim response
 }
 
 func NewAuthService(authRepository repository.IAuthRepository) IAuthService {
