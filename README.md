@@ -193,3 +193,13 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ```bash
 go get github.com/patrickmn/go-cache
 ```
+
+4. jalankan tidy
+```bash
+go mod tidy
+```
+
+5. Run Server
+```bash
+go run main.go
+```
