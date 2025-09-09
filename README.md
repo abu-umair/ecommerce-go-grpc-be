@@ -180,3 +180,6 @@ go get github.com/golang-jwt/jwt/v5
 ```bash
 go run main.go
 ```
+
+### API Logout
+#### History Steps
