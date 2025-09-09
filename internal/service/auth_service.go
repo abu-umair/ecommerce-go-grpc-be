@@ -3,7 +3,9 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
@@ -14,6 +16,7 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
@@ -123,13 +126,40 @@ func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*
 
 // Logout implements
 func (as *authService) Logout(ctx context.Context, request *auth.LogoutRequest) (*auth.LogoutResponse, error) {
-	//TODO: dapatkan token dari metadata
+	//? dapatkan token dari metadata
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+	}
 
-	//TODO: kembalikan token tadi hingga menjadi entity jwt
+	bearerToken, ok := md["authorization"]
+	if !ok {
+		return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+	}
 
-	//TODO: kita masukkan token ke dalam memory db / cache
+	if len(bearerToken) == 0 {
+		return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+	}
 
-	//TODO: kirim response
+	// Bearer qkfqkfqkqwkfqwkq...
+	tokenSplit := strings.Split(bearerToken[0], " ")
+
+	if len(tokenSplit) != 2 {
+		return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+	}
+
+	if tokenSplit[0] != "Bearer" {
+		return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+	}
+
+	jwtToken := tokenSplit[1]
+
+	//? kembalikan token tadi hingga menjadi entity jwt
+	
+
+	//? kita masukkan token ke dalam memory db / cache
+
+	//? kirim response
 }
 
 func NewAuthService(authRepository repository.IAuthRepository) IAuthService {
