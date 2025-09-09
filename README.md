@@ -188,3 +188,8 @@ go run main.go
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative auth/auth.proto
 
 ```
+
+3. install go-cache
+```bash
+go get github.com/patrickmn/go-cache
+```
