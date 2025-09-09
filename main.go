@@ -34,7 +34,7 @@ func main() { //?Sebagai gRpc server
 	cacheService := gocache.New(time.Hour*24, time.Hour*24)
 
 	authRepository := repository.NewAuthRepository(db)
-	authService := service.NewAuthService(authRepository)
+	authService := service.NewAuthService(authRepository, cacheService)
 	authHandler := handler.NewAuthHandler(authService)
 
 	serv := grpc.NewServer(

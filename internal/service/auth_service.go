@@ -158,7 +158,7 @@ func (as *authService) Logout(ctx context.Context, request *auth.LogoutRequest) 
 
 	//? kembalikan token tadi hingga menjadi entity jwt
 	tokenClaims, err := jwt.ParseWithClaims(jwtToken, &entity.JwtClaims{}, func(t *jwt.Token) (interface{}, error) {
-		if t, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method %v", t.Header["alg"])
 		}
 
