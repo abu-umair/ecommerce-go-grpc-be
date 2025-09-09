@@ -182,6 +182,9 @@ func (as *authService) Logout(ctx context.Context, request *auth.LogoutRequest) 
 	as.cacheService.Set(jwtToken, "", time.Duration(claims.ExpiresAt.Time.Unix()-time.Now().Unix())*time.Second)
 
 	//? kirim response
+	return &auth.LogoutResponse{
+		Base: utils.SuccessResponse("Logout success"),
+	}, nil
 
 }
 
