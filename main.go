@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/handler"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
@@ -13,6 +14,7 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/grpcmiddleware"
 	"github.com/joho/godotenv"
+	gocache "github.com/patrickmn/go-cache"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -28,6 +30,8 @@ func main() { //?Sebagai gRpc server
 
 	db := database.ConnectDB(ctx, os.Getenv("DB_URI"))
 	log.Println("Database is connected")
+
+	cacheService := gocache.New(time.Hour*24, time.Hour*24)
 
 	authRepository := repository.NewAuthRepository(db)
 	authService := service.NewAuthService(authRepository)

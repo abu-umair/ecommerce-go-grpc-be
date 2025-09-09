@@ -14,6 +14,7 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/auth"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	gocache "github.com/patrickmn/go-cache"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -28,6 +29,7 @@ type IAuthService interface {
 
 type authService struct {
 	authRepository repository.IAuthRepository
+	cacheService   *gocache.Cache
 }
 
 func (as *authService) Register(ctx context.Context, request *auth.RegisterRequest) (*auth.RegisterResponse, error) {
@@ -177,12 +179,15 @@ func (as *authService) Logout(ctx context.Context, request *auth.LogoutRequest) 
 	}
 
 	//? kita masukkan token ke dalam memory db / cache
+	as.cacheService.Set(jwtToken, "", time.Duration(claims.ExpiresAt.Time.Unix()-time.Now().Unix())*time.Second)
 
 	//? kirim response
+
 }
 
-func NewAuthService(authRepository repository.IAuthRepository) IAuthService {
+func NewAuthService(authRepository repository.IAuthRepository, cacheService *gocache.Cache) IAuthService {
 	return &authService{
 		authRepository: authRepository,
+		cacheService:   cacheService,
 	}
 }
