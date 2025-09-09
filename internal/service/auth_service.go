@@ -20,6 +20,7 @@ import (
 type IAuthService interface {
 	Register(ctx context.Context, request *auth.RegisterRequest) (*auth.RegisterResponse, error)
 	Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error)
+	Logout(ctx context.Context, request *auth.LogoutRequest) (*auth.LogoutResponse, error)
 }
 
 type authService struct {
@@ -118,6 +119,17 @@ func (as *authService) Login(ctx context.Context, request *auth.LoginRequest) (*
 		AccessToken: accessToken,
 	}, nil
 
+}
+
+// Logout implements
+func (as *authService) Logout(ctx context.Context, request *auth.LogoutRequest) (*auth.LogoutResponse, error) {
+	//TODO: dapatkan token dari metadata
+
+	//TODO: kembalikan token tadi hingga menjadi entity jwt
+
+	//TODO: kita masukkan token ke dalam memory db / cache
+
+	//TODO: kirim response
 }
 
 func NewAuthService(authRepository repository.IAuthRepository) IAuthService {
