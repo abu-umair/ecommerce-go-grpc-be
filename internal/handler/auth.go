@@ -35,28 +35,6 @@ func (sh *authHandler) Register(ctx context.Context, request *auth.RegisterReque
 	return res, nil
 }
 
-// ? mengimplementasikan auth service logout
-func (sh *authHandler) Logout(ctx context.Context, request *auth.LogoutRequest) (*auth.LogoutResponse, error) {
-	validationErrors, err := utils.CheckValidation(request)
-	if err != nil {
-		return nil, err
-	}
-
-	if validationErrors != nil {
-		return &auth.LogoutResponse{
-			Base: utils.ValidationErrorResponse(validationErrors),
-		}, nil
-	}
-
-	//?proses Logout
-	res, err := sh.authService.Logout(ctx, request)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
-}
-
 // ? mengimplementasikan auth service login
 func (sh *authHandler) Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error) {
 	validationErrors, err := utils.CheckValidation(request)
@@ -72,6 +50,28 @@ func (sh *authHandler) Login(ctx context.Context, request *auth.LoginRequest) (*
 
 	//?proses Login
 	res, err := sh.authService.Login(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// ? mengimplementasikan auth service logout
+func (sh *authHandler) Logout(ctx context.Context, request *auth.LogoutRequest) (*auth.LogoutResponse, error) {
+	validationErrors, err := utils.CheckValidation(request)
+	if err != nil {
+		return nil, err
+	}
+
+	if validationErrors != nil {
+		return &auth.LogoutResponse{
+			Base: utils.ValidationErrorResponse(validationErrors),
+		}, nil
+	}
+
+	//?proses Logout
+	res, err := sh.authService.Logout(ctx, request)
 	if err != nil {
 		return nil, err
 	}
