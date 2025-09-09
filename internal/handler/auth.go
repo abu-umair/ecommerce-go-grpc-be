@@ -35,7 +35,7 @@ func (sh *authHandler) Register(ctx context.Context, request *auth.RegisterReque
 	return res, nil
 }
 
-// ? mengimplementasikan auth service login
+// ? mengimplementasikan auth service logout
 func (sh *authHandler) Logout(ctx context.Context, request *auth.LogoutRequest) (*auth.LogoutResponse, error) {
 	validationErrors, err := utils.CheckValidation(request)
 	if err != nil {
@@ -57,7 +57,7 @@ func (sh *authHandler) Logout(ctx context.Context, request *auth.LogoutRequest) 
 	return res, nil
 }
 
-// ? mengimplementasikan auth service logout
+// ? mengimplementasikan auth service login
 func (sh *authHandler) Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error) {
 	validationErrors, err := utils.CheckValidation(request)
 	if err != nil {
