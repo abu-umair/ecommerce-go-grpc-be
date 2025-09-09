@@ -11,6 +11,7 @@ option go_package = "github.com/abu-umair/ecommerce-go-grpc-be/pb/auth";
 service AuthService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse); //?menambahkan service baru
+  rpc Logout(LogoutRequest) returns (LogoutResponse); //?menambahkan service logout
 }
 
 message RegisterRequest { //?RegisterRequest = FormRequest di Laravel (buat validasi).
@@ -47,4 +48,13 @@ message LoginRequest {
 message LoginResponse { 
   common.BaseResponse base = 1;
   string access_token = 2;
+}
+
+// Logout
+message LogoutRequest { 
+
+}
+
+message LogoutResponse { 
+  common.BaseResponse base = 1;
 }
