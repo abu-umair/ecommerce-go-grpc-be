@@ -33,6 +33,8 @@ func main() { //?Sebagai gRpc server
 
 	cacheService := gocache.New(time.Hour*24, time.Hour*24)
 
+	authMiddleware := grpcmiddleware.NewAuthMiddleware(cacheService)
+
 	authRepository := repository.NewAuthRepository(db)
 	authService := service.NewAuthService(authRepository, cacheService)
 	authHandler := handler.NewAuthHandler(authService)
@@ -41,6 +43,7 @@ func main() { //?Sebagai gRpc server
 
 		grpc.ChainUnaryInterceptor(
 			grpcmiddleware.ErrorMiddleware, //?memasukkan func error middleware
+			authMiddleware.Middleware,
 		),
 	)
 
