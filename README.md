@@ -203,3 +203,6 @@ go mod tidy
 ```bash
 go run main.go
 ```
+
+### Implementasi Middleware Autentikasi
+#### History Steps
