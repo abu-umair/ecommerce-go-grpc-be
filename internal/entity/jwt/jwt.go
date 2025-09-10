@@ -1,5 +1,16 @@
 package jwt
 
+import "github.com/golang-jwt/jwt/v5"
+
+
+type JwtClaims struct {
+	jwt.RegisteredClaims
+	Email    string `json:"email"`
+	FullName string `json:"full_name"`
+	Role     string `json:"role"`
+}
+
+
 func GetClaimsFromToken(token string) 
 
 //? kembalikan token tadi hingga menjadi entity jwt
