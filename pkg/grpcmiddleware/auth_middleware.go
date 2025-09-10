@@ -4,6 +4,7 @@ import (
 	"context"
 
 	jwtentity "github.com/abu-umair/ecommerce-go-grpc-be/internal/entity/jwt"
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
 	gocache "github.com/patrickmn/go-cache"
 
 	"google.golang.org/grpc"
@@ -21,6 +22,11 @@ func (am *authMiddleware) Middleware(ctx context.Context, req any, info *grpc.Un
 	}
 
 	// Cek token  dari  logout cache
+	_, ok := am.cacheService.Get(tokenStr)
+
+	if ok {
+		return nil, utils.UnauthenticatedResponse()
+	}
 
 	// Parse jwt nya hingga jadi entity
 
