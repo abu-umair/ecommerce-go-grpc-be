@@ -1,7 +1,12 @@
 package jwt
 
-import "github.com/golang-jwt/jwt/v5"
+import (
+	"fmt"
+	"os"
 
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
+	"github.com/golang-jwt/jwt/v5"
+)
 
 type JwtClaims struct {
 	jwt.RegisteredClaims
@@ -10,11 +15,9 @@ type JwtClaims struct {
 	Role     string `json:"role"`
 }
 
-
-func GetClaimsFromToken(token string) 
-
-//? kembalikan token tadi hingga menjadi entity jwt
-tokenClaims, err := jwt.ParseWithClaims(jwtToken, &entity.JwtClaims{}, func(t *jwt.Token) (interface{}, error) {
+func GetClaimsFromToken(token string) (*JwtClaims, error) {
+	//? kembalikan token tadi hingga menjadi entity jwt
+	tokenClaims, err := jwt.ParseWithClaims(token, &JwtClaims{}, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method %v", t.Header["alg"])
 		}
@@ -23,14 +26,16 @@ tokenClaims, err := jwt.ParseWithClaims(jwtToken, &entity.JwtClaims{}, func(t *j
 	})
 
 	if err != nil {
-		return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+		return nil, utils.UnauthenticatedResponse()
 	}
 
 	if !tokenClaims.Valid {
-		return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+		return nil, utils.UnauthenticatedResponse()
 	}
 
-	var claims *entity.JwtClaims
-	if claims, ok = tokenClaims.Claims.(*entity.JwtClaims); !ok {
-		return nil, status.Error(codes.Unauthenticated, "Unauthenticated")
+	if claims, ok := tokenClaims.Claims.(*JwtClaims); !ok {
+		return claims, nil
 	}
+
+	return nil, utils.UnauthenticatedResponse()
+}
