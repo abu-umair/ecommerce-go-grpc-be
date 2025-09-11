@@ -1,6 +1,7 @@
 package jwt
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -8,11 +9,19 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+type JwtEntityContextKey string
+
+var JwtEntityContextKeyValue JwtEntityContextKey = "JwtEntity"
+
 type JwtClaims struct {
 	jwt.RegisteredClaims
 	Email    string `json:"email"`
 	FullName string `json:"full_name"`
 	Role     string `json:"role"`
+}
+
+func (jc *JwtClaims) SetToContext(ctx context.Context) context.Context {
+	return context.WithValue(ctx, JwtEntityContextKeyValue, jc)
 }
 
 func GetClaimsFromToken(token string) (*JwtClaims, error) {
