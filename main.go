@@ -7,12 +7,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/grpcmiddleware"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/handler"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/service"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/auth"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
-	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/grpcmiddleware"
 	"github.com/joho/godotenv"
 	gocache "github.com/patrickmn/go-cache"
 	"google.golang.org/grpc"
