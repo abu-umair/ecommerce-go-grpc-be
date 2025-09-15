@@ -79,6 +79,28 @@ func (sh *authHandler) Logout(ctx context.Context, request *auth.LogoutRequest) 
 	return res, nil
 }
 
+//? mengimplementasikan auth service change password
+func (sh *authHandler) ChangePassword(ctx context.Context, request *auth.ChangePasswordRequest) (*auth.ChangePasswordResponse, error) {
+	validationErrors, err := utils.CheckValidation(request)
+	if err != nil {
+		return nil, err
+	}
+
+	if validationErrors != nil {
+		return &auth.ChangePasswordResponse{
+			Base: utils.ValidationErrorResponse(validationErrors),
+		}, nil
+	}
+
+	//?proses ChangePassword
+	res, err := sh.authService.ChangePassword(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, status.Errorf(codes.Unimplemented, "method ChangePassword not implemented")
+} 
+
 func NewAuthHandler(authService service.IAuthService) *authHandler {
 	return &authHandler{
 		authService: authService,
