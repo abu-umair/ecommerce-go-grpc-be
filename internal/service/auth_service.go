@@ -193,8 +193,12 @@ func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangeP
 	}
 
 	//* Update new password ke DB
+	as.authRepository.UpdatetUserPassword()
 
 	//* Kirim response
+	return &auth.ChangePasswordResponse{
+		Base: utils.SuccessResponse("Change password success"),
+	}, nil
 }
 
 func NewAuthService(authRepository repository.IAuthRepository, cacheService *gocache.Cache) IAuthService {
