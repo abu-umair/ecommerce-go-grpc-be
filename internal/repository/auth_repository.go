@@ -12,6 +12,8 @@ import (
 type IAuthRepository interface {
 	GetUserByEmail(ctx context.Context, email string) (*entity.User, error)
 	InsertUser(ctx context.Context, user *entity.User) error
+	UpdateUserPassword(ctx context.Context, userId string, hashedPassword string, updatedBy string) error
+
 }
 
 type authRepository struct {
