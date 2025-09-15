@@ -98,7 +98,7 @@ func (sh *authHandler) ChangePassword(ctx context.Context, request *auth.ChangeP
 		return nil, err
 	}
 
-	return nil, status.Errorf(codes.Unimplemented, "method ChangePassword not implemented")
+	return res, nil
 } 
 
 func NewAuthHandler(authService service.IAuthService) *authHandler {

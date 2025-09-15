@@ -24,6 +24,7 @@ type IAuthService interface {
 	Register(ctx context.Context, request *auth.RegisterRequest) (*auth.RegisterResponse, error)
 	Login(ctx context.Context, request *auth.LoginRequest) (*auth.LoginResponse, error)
 	Logout(ctx context.Context, request *auth.LogoutRequest) (*auth.LogoutResponse, error)
+	ChangePassword(ctx context.Context, request *auth.ChangePasswordRequest) (*auth.ChangePasswordResponse, error)
 }
 
 type authService struct {
@@ -149,6 +150,17 @@ func (as *authService) Logout(ctx context.Context, request *auth.LogoutRequest) 
 		Base: utils.SuccessResponse("Logout success"),
 	}, nil
 
+}
+
+// ChangePassword implements
+func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangePasswordRequest) (*auth.ChangePasswordResponse, error) {
+	//*Cek apakah new pass confirmation matched
+
+	//* Cek apakah old password sama
+
+	//* Update new password ke DB
+
+	//* Kirim response
 }
 
 func NewAuthService(authRepository repository.IAuthRepository, cacheService *gocache.Cache) IAuthService {
