@@ -211,3 +211,7 @@ go run main.go
 ```bash
 go run main.go
 ```
+
+### API Change Password
+#### History Step
+

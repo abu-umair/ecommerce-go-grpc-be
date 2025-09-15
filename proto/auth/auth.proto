@@ -12,6 +12,7 @@ service AuthService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse); //?menambahkan service baru
   rpc Logout(LogoutRequest) returns (LogoutResponse); //?menambahkan service logout
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse);
 }
 
 message RegisterRequest { //?RegisterRequest = FormRequest di Laravel (buat validasi).
@@ -56,5 +57,16 @@ message LogoutRequest {
 }
 
 message LogoutResponse { 
+  common.BaseResponse base = 1;
+}
+
+// ChangePassword
+message ChangePasswordRequest { 
+string old_password = 1 [(buf.validate.field).string = { min_len: 1, max_len: 255 }];
+  string new_password = 2 [(buf.validate.field).string = { min_len: 1, max_len: 255 }];
+  string new_password_confirmation = 3 [(buf.validate.field).string = { min_len: 1, max_len: 255 }];
+}
+
+message ChangePasswordResponse { 
   common.BaseResponse base = 1;
 }
