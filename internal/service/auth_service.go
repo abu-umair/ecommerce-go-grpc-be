@@ -155,6 +155,11 @@ func (as *authService) Logout(ctx context.Context, request *auth.LogoutRequest) 
 // ChangePassword implements
 func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangePasswordRequest) (*auth.ChangePasswordResponse, error) {
 	//*Cek apakah new pass confirmation matched
+	if request.NewPassword != request.NewPasswordConfirmation {
+		return &auth.ChangePasswordResponse{
+			Base: utils.BadRequestResponse("New password is not matched"),
+		}, nil
+	}
 
 	//* Cek apakah old password sama
 
