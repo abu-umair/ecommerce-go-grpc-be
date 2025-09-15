@@ -42,7 +42,7 @@ func GetClaimsFromToken(token string) (*JwtClaims, error) {
 		return nil, utils.UnauthenticatedResponse()
 	}
 
-	if claims, ok := tokenClaims.Claims.(*JwtClaims); !ok {
+	if claims, ok := tokenClaims.Claims.(*JwtClaims); ok {
 		return claims, nil
 	}
 

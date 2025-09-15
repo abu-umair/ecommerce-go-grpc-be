@@ -205,4 +205,9 @@ go run main.go
 ```
 
 ### Implementasi Middleware Autentikasi
-#### History Steps
+#### History Step
+
+1. Run Server
+```bash
+go run main.go
+```
