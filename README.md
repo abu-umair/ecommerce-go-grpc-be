@@ -215,3 +215,9 @@ go run main.go
 ### API Change Password
 #### History Step
 
+1. Generate ulang auth.proto nya, karena ada perubahan pada auth.proto
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative auth/auth.proto
+
+```
+
