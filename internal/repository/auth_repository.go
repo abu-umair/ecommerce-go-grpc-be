@@ -72,7 +72,7 @@ func (ar *authRepository) InsertUser(ctx context.Context, user *entity.User) err
 	return nil
 }
 
-func (ar *authRepository) UpdatetUserPassword(ctx context.Context, userId string, hashedPassword string, updatedBy string) error {
+func (ar authRepository) UpdateUserPassword(ctx context.Context, userId string, hashedPassword string, updatedBy string) error {
 	_, err := ar.db.ExecContext(
 		ctx,
 		"UPDATE user SET password = $1 updated_at = $2, updated_by = $3 WHERE id = $4",

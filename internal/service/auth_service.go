@@ -193,7 +193,7 @@ func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangeP
 	}
 
 	//* Update new password ke DB
-	as.authRepository.UpdatetUserPassword()
+	as.authRepository.UpdateUserPassword()
 
 	//* Kirim response
 	return &auth.ChangePasswordResponse{
