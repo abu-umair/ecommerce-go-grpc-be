@@ -237,6 +237,9 @@ https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/timest
 2. Generate ulang auth.proto nya, karena ada perubahan pada auth.proto
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative auth/auth.proto
-
 ```
 
+3. Install timestamp nya
+```bash
+go get google.golang.org/protobuf/types/known/timestamppb
+```
