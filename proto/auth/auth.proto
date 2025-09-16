@@ -70,3 +70,14 @@ string old_password = 1 [(buf.validate.field).string = { min_len: 1, max_len: 25
 message ChangePasswordResponse { 
   common.BaseResponse base = 1;
 }
+
+// Get Profile
+message GetProfileRequest { 
+string old_password = 1 [(buf.validate.field).string = { min_len: 1, max_len: 255 }];
+  string new_password = 2 [(buf.validate.field).string = { min_len: 1, max_len: 255 }];
+  string new_password_confirmation = 3 [(buf.validate.field).string = { min_len: 1, max_len: 255 }];
+}
+
+message GetProfileResponse { 
+  common.BaseResponse base = 1;
+}

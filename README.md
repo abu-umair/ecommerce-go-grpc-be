@@ -226,4 +226,12 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 go run main.go
 ```
 
+### API Get Profile
+#### History Step
+
+1. Copy file proto (timestamp)
+```bash
+https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/timestamp.proto
+```
+
 
