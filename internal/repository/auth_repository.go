@@ -13,7 +13,6 @@ type IAuthRepository interface {
 	GetUserByEmail(ctx context.Context, email string) (*entity.User, error)
 	InsertUser(ctx context.Context, user *entity.User) error
 	UpdateUserPassword(ctx context.Context, userId string, hashedPassword string, updatedBy string) error
-
 }
 
 type authRepository struct {
@@ -77,7 +76,7 @@ func (ar *authRepository) InsertUser(ctx context.Context, user *entity.User) err
 func (ar authRepository) UpdateUserPassword(ctx context.Context, userId string, hashedPassword string, updatedBy string) error {
 	_, err := ar.db.ExecContext(
 		ctx,
-		"UPDATE user SET password = $1 updated_at = $2, updated_by = $3 WHERE id = $4",
+		"UPDATE \"user\" SET password = $1, updated_at = $2, updated_by = $3 WHERE id = $4",
 		hashedPassword,
 		time.Now(),
 		updatedBy,

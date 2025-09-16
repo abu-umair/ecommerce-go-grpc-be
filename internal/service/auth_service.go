@@ -193,7 +193,15 @@ func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangeP
 	}
 
 	//* Update new password ke DB
-	as.authRepository.UpdateUserPassword()
+	hashedNewPassword, err := bcrypt.GenerateFromPassword([]byte(request.NewPassword), 10)
+	if err != nil {
+		return nil, err
+	}
+
+	err = as.authRepository.UpdateUserPassword(ctx, user.Id, string(hashedNewPassword), user.FullName)
+	if err != nil {
+		return nil, err
+	}
 
 	//* Kirim response
 	return &auth.ChangePasswordResponse{

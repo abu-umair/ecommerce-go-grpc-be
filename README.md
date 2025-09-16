@@ -221,3 +221,9 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 
 ```
 
+2. Run Server
+```bash
+go run main.go
+```
+
+
