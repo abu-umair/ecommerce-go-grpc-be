@@ -210,6 +210,22 @@ func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangeP
 	}, nil
 }
 
+// GetProfile implements
+func (as *authService) GetProfile(ctx context.Context, request *auth.GetProfileRequest) (*auth.GetProfileResponse, error) {
+	//* Get data token
+
+
+	//* Ambil data dari DB
+	
+	
+	//* Buat Response
+
+	//* Kirim response
+	return &auth.GetProfileResponse{
+		Base: utils.SuccessResponse("Get Profile success"),
+	}, nil
+}
+
 func NewAuthService(authRepository repository.IAuthRepository, cacheService *gocache.Cache) IAuthService {
 	return &authService{
 		authRepository: authRepository,
