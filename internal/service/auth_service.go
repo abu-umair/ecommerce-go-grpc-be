@@ -18,6 +18,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type IAuthService interface {
@@ -213,16 +214,21 @@ func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangeP
 // GetProfile implements
 func (as *authService) GetProfile(ctx context.Context, request *auth.GetProfileRequest) (*auth.GetProfileResponse, error) {
 	//* Get data token
-
+	claims, ok := ctx.Value(jwtentity.JwtEntityContextKeyValue).(*jwtentity.JwtClaims)
+	if !ok {
+		return nil, utils.UnauthenticatedResponse()
+	}
 
 	//* Ambil data dari DB
-	
-	
-	//* Buat Response
 
-	//* Kirim response
+	//* Buat Response
 	return &auth.GetProfileResponse{
-		Base: utils.SuccessResponse("Get Profile success"),
+		Base:        utils.SuccessResponse("Get Profile success"),
+		UserId:      claims.Subject,
+		FullName:    claims.FullName,
+		Email:       claims.Email,
+		RoleCode:    claims.Role,
+		MemberSince: timestamppb.Now(),
 	}, nil
 }
 
