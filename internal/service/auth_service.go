@@ -136,8 +136,7 @@ func (as *authService) Logout(ctx context.Context, request *auth.LogoutRequest) 
 		return nil, err
 	}
 
-	tokenClaims, err := jwtentity.GetClaimsFromToken(jwtToken)
-
+	tokenClaims, err := jwtentity.GetClaimsFromContext(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -214,7 +213,7 @@ func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangeP
 // GetProfile implements
 func (as *authService) GetProfile(ctx context.Context, request *auth.GetProfileRequest) (*auth.GetProfileResponse, error) {
 	//* Get data token
-	//? dipindahkan ke jwt.go 
+	//? dipindahkan ke jwt.go
 	claims, err := jwtentity.GetClaimsFromContext(ctx)
 	if err != nil {
 		return nil, err
