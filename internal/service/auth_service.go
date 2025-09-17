@@ -220,6 +220,17 @@ func (as *authService) GetProfile(ctx context.Context, request *auth.GetProfileR
 	}
 
 	//* Ambil data dari DB
+	user, err := as.authRepository.GetUserByEmail(ctx, claims.Email)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if user == nil {
+		return &auth.GetProfileResponse{
+			Base: utils.BadRequestResponse("User doesn't exist"),
+		}, nil
+	}
 
 	//* Buat Response
 	return &auth.GetProfileResponse{
@@ -228,7 +239,7 @@ func (as *authService) GetProfile(ctx context.Context, request *auth.GetProfileR
 		FullName:    claims.FullName,
 		Email:       claims.Email,
 		RoleCode:    claims.Role,
-		MemberSince: timestamppb.Now(),
+		MemberSince: timestamppb.New(user.CreatedAt),
 	}, nil
 }
 
