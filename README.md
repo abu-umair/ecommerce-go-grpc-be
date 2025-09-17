@@ -243,3 +243,14 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ```bash
 go get google.golang.org/protobuf/types/known/timestamppb
 ```
+
+4. Run Server
+```bash
+go run main.go
+```
+
+5. convert ke website untuk melihat hasil timestamp : 1756904649 (optional)
+```bash
+https://www.epochconverter.com/
+```
+
