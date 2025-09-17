@@ -214,9 +214,10 @@ func (as *authService) ChangePassword(ctx context.Context, request *auth.ChangeP
 // GetProfile implements
 func (as *authService) GetProfile(ctx context.Context, request *auth.GetProfileRequest) (*auth.GetProfileResponse, error) {
 	//* Get data token
-	claims, ok := ctx.Value(jwtentity.JwtEntityContextKeyValue).(*jwtentity.JwtClaims)
-	if !ok {
-		return nil, utils.UnauthenticatedResponse()
+	//? dipindahkan ke jwt.go 
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	//* Ambil data dari DB
