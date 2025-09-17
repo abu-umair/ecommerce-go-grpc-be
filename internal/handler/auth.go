@@ -101,6 +101,17 @@ func (sh *authHandler) ChangePassword(ctx context.Context, request *auth.ChangeP
 	return res, nil
 } 
 
+//? mengimplementasikan get profile
+func (sh *authHandler) GetProfile(ctx context.Context, request *auth.GetProfileRequest) (*auth.GetProfileResponse, error) {
+	//?proses 
+	res, err := sh.authService.GetProfile(ctx, request)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+} 
+
 func NewAuthHandler(authService service.IAuthService) *authHandler {
 	return &authHandler{
 		authService: authService,
