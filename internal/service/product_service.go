@@ -29,47 +29,28 @@ func (ps *productService) CreateProduct(ctx context.Context, request *product.Cr
 		return nil, err
 	}
 
-	//* cek juga apakah imagenya ada ?
+	//* cek juga apakah imagenya ada ? (step ini sementara di skip)
 
 	//* insert ke db
+	productEntity := entity.Product{
+		Id:            uuid.NewString(),
+		Name:          request.Name,
+		Description:   request.Description,
+		Price:         request.Price,
+		ImageFileName: request.ImageFileName,
+		CreatedAt:     time.Now(),
+		CreatedBy:     claims.FullName,
+	}
+
+	err = ps.productRepository.CreateNewProduct(ctx, &productEntity)
+	if err != nil {
+		return nil, err
+	}
 
 	//* Success
-
-	user, err := ps.authRepository.GetUserByEmail(ctx, request.Email)
-	if err != nil {
-		return nil, err
-	}
-
-	if user != nil {
-		return &product.CreateProductResponse{
-			Base: utils.BadRequestResponse("User already exist"),
-		}, nil
-	}
-
-	// Hash password
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), 10)
-	if err != nil {
-		return nil, err
-	}
-
-	// Insert ke db
-	newUser := entity.User{
-		Id:        uuid.NewString(),
-		FullName:  request.FullName,
-		Email:     request.Email,
-		Password:  string(hashedPassword),
-		RoleCode:  entity.UserRoleCustomer,
-		CreatedAt: time.Now(),
-		CreatedBy: &request.FullName,
-	}
-
-	err = ps.authRepository.InsertUser(ctx, &newUser)
-	if err != nil {
-		return nil, err
-	}
-
 	return &product.CreateProductResponse{
-		Base: utils.SuccessResponse("User is registered"),
+		Base: utils.SuccessResponse("Product created successfully"),
+		Id: productEntity.Id,
 	}, nil
 }
 
