@@ -11,7 +11,7 @@ import (
 type productHandler struct {
 	product.UnimplementedProductServiceServer
 
-	authService service.IAuthService
+	productService service.IProductService
 }
 
 func (ph *productHandler) CreateProduct(ctx context.Context, request *product.CreateProductRequest) (*product.CreateProductResponse, error) {
@@ -26,8 +26,7 @@ func (ph *productHandler) CreateProduct(ctx context.Context, request *product.Cr
 		}, nil
 	}
 
-	//?proses Register
-	res, err := ph.authService.Register(ctx, request)
+	res, err := ph.productService.CreateProduct(ctx, request)
 	if err != nil {
 		return nil, err
 	}
@@ -35,8 +34,8 @@ func (ph *productHandler) CreateProduct(ctx context.Context, request *product.Cr
 	return res, nil
 }
 
-func NewProductHandler(authService service.IAuthService) *productHandler {
+func NewProductHandler(productService service.IProductService) *productHandler {
 	return &productHandler{
-		authService: authService,
+		productService: productService,
 	}
 }
