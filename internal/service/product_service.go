@@ -10,8 +10,6 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/product"
 	"github.com/google/uuid"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 type IProductService interface {
@@ -50,7 +48,7 @@ func (ps *productService) CreateProduct(ctx context.Context, request *product.Cr
 	//* Success
 	return &product.CreateProductResponse{
 		Base: utils.SuccessResponse("Product created successfully"),
-		Id: productEntity.Id,
+		Id:   productEntity.Id,
 	}, nil
 }
 
