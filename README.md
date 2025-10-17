@@ -273,3 +273,7 @@ grpcwebproxy --backend_addr=localhost:50052 --server_bind_address=0.0.0.0 --serv
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative product/product.proto
 ```
+2. Run Server
+```bash
+go run main.go
+```
