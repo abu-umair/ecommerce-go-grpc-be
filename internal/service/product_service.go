@@ -27,6 +27,10 @@ func (ps *productService) CreateProduct(ctx context.Context, request *product.Cr
 		return nil, err
 	}
 
+	if claims.Role != entity.UserRoleAdmin {
+		return nil, utils.UnauthenticatedResponse()
+	}
+
 	//* cek juga apakah imagenya ada ? (step ini sementara di skip)
 
 	//* insert ke db
