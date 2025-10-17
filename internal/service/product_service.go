@@ -24,11 +24,15 @@ type productService struct {
 }
 
 func (ps *productService) CreateProduct(ctx context.Context, request *product.CreateProductRequest) (*product.CreateProductResponse, error) {
-	if request.Password != request.PasswordConfirmation {
-		return &product.CreateProductResponse{
-			Base: utils.BadRequestResponse("Password is not matched"),
-		}, nil
-	}
+	//* cek dulu apakah user admin ? 
+
+	//* cek juga apakah imagenya ada ?
+
+	//* insert ke db
+
+	//* Success 
+	
+	
 	user, err := ps.authRepository.GetUserByEmail(ctx, request.Email)
 	if err != nil {
 		return nil, err
