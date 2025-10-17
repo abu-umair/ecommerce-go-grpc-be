@@ -5,13 +5,12 @@ import (
 	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
+	jwtentity "github.com/abu-umair/ecommerce-go-grpc-be/internal/entity/jwt"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
-	"github.com/abu-umair/ecommerce-go-grpc-be/pb/auth"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/product"
 	"github.com/google/uuid"
 
-	gocache "github.com/patrickmn/go-cache"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -24,15 +23,18 @@ type productService struct {
 }
 
 func (ps *productService) CreateProduct(ctx context.Context, request *product.CreateProductRequest) (*product.CreateProductResponse, error) {
-	//* cek dulu apakah user admin ? 
+	//* cek dulu apakah user admin ?
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	//* cek juga apakah imagenya ada ?
 
 	//* insert ke db
 
-	//* Success 
-	
-	
+	//* Success
+
 	user, err := ps.authRepository.GetUserByEmail(ctx, request.Email)
 	if err != nil {
 		return nil, err
