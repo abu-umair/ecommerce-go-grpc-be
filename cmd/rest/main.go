@@ -9,6 +9,7 @@ import (
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/handler"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func handleGetFileName(c *fiber.Ctx) error {
@@ -40,6 +41,7 @@ func handleGetFileName(c *fiber.Ctx) error {
 
 func main() {
 	app := fiber.New()
+	app.Use(cors.New())
 
 	app.Get("/storage/product/:filename", handleGetFileName)
 
