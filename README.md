@@ -285,3 +285,8 @@ go run main.go
 ```bash
 go get github.com/gofiber/fiber/v2
 ```
+
+2. Run Server gofiber (utk upload)
+```bash
+go run cmd/rest/main.go
+```
