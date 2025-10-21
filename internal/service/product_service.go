@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
@@ -32,6 +34,16 @@ func (ps *productService) CreateProduct(ctx context.Context, request *product.Cr
 	}
 
 	//* cek juga apakah imagenya ada ? (step ini sementara di skip)
+	imagePath := filepath.Join("storage", "product", request.ImageFileName)
+	_, err = os.Stat(imagePath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return &product.CreateProductResponse{
+				Base: utils.BadRequestResponse("File not found"),
+			}, nil
+		}
+		return nil, err
+	}
 
 	//* insert ke db
 	productEntity := entity.Product{
