@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,25 @@ func UploadProductImageHandler(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "image data not found",
+		})
+	}
+
+	//? validasi gambar
+	//? memeriksa ekstensi file (validasi extensi file)
+	ext := strings.ToLower(filepath.Ext(file.Filename))
+
+	allowedExts := map[string]bool{
+		".jpg":  true,
+		".jpeg": true,
+		".png":  true,
+		".webp": true,
+	}
+
+	//? validasi content type
+	if !allowedExts[ext] {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "image extention not allowed (jpg, jpeg, png, webp)",
 		})
 	}
 
