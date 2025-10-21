@@ -30,11 +30,27 @@ func UploadProductImageHandler(c *fiber.Ctx) error {
 		".webp": true,
 	}
 
-	//? validasi content type
 	if !allowedExts[ext] {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "image extention not allowed (jpg, jpeg, png, webp)",
+		})
+	}
+
+	//? validasi content type
+	contentType := file.Header.Get("Content-Type")
+
+	allowedContentType := map[string]bool{
+		"image/jpg":  true,
+		"image/jpeg": true,
+		"image/png":  true,
+		"image/webp": true,
+	}
+
+	if !allowedContentType[contentType] {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "Content Type is not allowed",
 		})
 	}
 
