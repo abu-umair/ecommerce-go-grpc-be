@@ -277,3 +277,11 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ```bash
 go run main.go
 ```
+
+## E-Commerce Project - Produk
+### Implementasi Upload Gambar Produk
+#### History Steps
+1. Mendownload modul gofiber (dipilih karena mudah setupnya)
+```bash
+go get github.com/gofiber/fiber/v2
+```
