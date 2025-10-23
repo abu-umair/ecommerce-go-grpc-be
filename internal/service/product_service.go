@@ -69,6 +69,15 @@ func (ps *productService) CreateProduct(ctx context.Context, request *product.Cr
 	}, nil
 }
 
+func (ps *productService) DetailProduct(ctx context.Context, request *product.DetailProductRequest) (*product.DetailProductResponse, error) {
+	//* Query ke DB dengan data Id
+
+	//* Apabila null, kita return not found
+
+	//* Kirim response
+
+}
+
 func NewProductService(productRepository repository.IProductRepository) IProductService {
 	return &productService{
 		productRepository: productRepository,
