@@ -71,6 +71,10 @@ func (ps *productService) CreateProduct(ctx context.Context, request *product.Cr
 
 func (ps *productService) DetailProduct(ctx context.Context, request *product.DetailProductRequest) (*product.DetailProductResponse, error) {
 	//* Query ke DB dengan data Id
+	productEntity, err := ps.productRepository.GetProductById(ctx, request.Id)
+	if err != nil {
+		return nil, err
+	}
 
 	//* Apabila null, kita return not found
 
