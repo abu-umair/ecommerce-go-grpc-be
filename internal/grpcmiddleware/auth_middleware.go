@@ -2,6 +2,7 @@ package grpcmiddleware
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	jwtentity "github.com/abu-umair/ecommerce-go-grpc-be/internal/entity/jwt"
@@ -16,8 +17,9 @@ type authMiddleware struct {
 }
 
 func (am *authMiddleware) Middleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
+	fmt.Println(info.FullMethod) //? hanya utk mendapatkan data FullMethod nya saja, 
 	log.Println(info.FullMethod)
-	if info.FullMethod == "/auth.AuthService/Login" || info.FullMethod == "/auth.AuthService/Register" {
+	if info.FullMethod == "/auth.AuthService/Login" || info.FullMethod == "/auth.AuthService/Register" ||  info.FullMethod == "/product.ProductService/DetailProduct"{
 		return handler(ctx, req)
 	}
 
