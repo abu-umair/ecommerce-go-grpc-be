@@ -298,3 +298,10 @@ go run cmd/grpc/main.go
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative product/product.proto
 ```
+
+2. Run Server 
+```bash
+go run cmd/grpc/main.go
+```
+
+3. ambil ID dari table product, kemudian pastekan di postman (pada Detail Product)
