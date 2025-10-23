@@ -84,6 +84,15 @@ func (ps *productService) DetailProduct(ctx context.Context, request *product.De
 	}
 
 	//* Kirim response
+	return &product.DetailProductResponse{
+			Base:        utils.SuccessResponse("Get product detail success"),
+			Id:          productEntity.Id,
+			Name:        productEntity.Name,
+			Description: productEntity.Description,
+			Price:       productEntity.Price,
+			ImageUrl:    productEntity.ImageFileName,
+		},
+		nil
 
 }
 
