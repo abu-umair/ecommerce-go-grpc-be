@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 	"time"
@@ -90,7 +91,7 @@ func (ps *productService) DetailProduct(ctx context.Context, request *product.De
 			Name:        productEntity.Name,
 			Description: productEntity.Description,
 			Price:       productEntity.Price,
-			ImageUrl:    productEntity.ImageFileName,
+			ImageUrl:    fmt.Sprintf("http://localhost:3000/storage/product/%s", productEntity.ImageFileName),
 		},
 		nil
 
