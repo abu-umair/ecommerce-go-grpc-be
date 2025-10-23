@@ -36,4 +36,3 @@ func ValidationErrorResponse(validationErrors []*common.ValidationError) *common
 	}
 }
 ```
----

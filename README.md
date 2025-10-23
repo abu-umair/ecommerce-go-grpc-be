@@ -279,7 +279,7 @@ go run main.go
 ```
 
 ## E-Commerce Project - Produk
-### Implementasi Upload Gambar Produk
+### API Detail Produk
 #### History Steps
 1. Mendownload modul gofiber (dipilih karena mudah setupnya)
 ```bash
@@ -290,3 +290,7 @@ go get github.com/gofiber/fiber/v2
 ```bash
 go run cmd/grpc/main.go
 ```
+
+## E-Commerce Project - Produk
+### Implementasi Upload Gambar Produk
+#### History Steps
