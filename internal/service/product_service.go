@@ -91,7 +91,7 @@ func (ps *productService) DetailProduct(ctx context.Context, request *product.De
 			Name:        productEntity.Name,
 			Description: productEntity.Description,
 			Price:       productEntity.Price,
-			ImageUrl:    fmt.Sprintf("http://localhost:3000/storage/product/%s", productEntity.ImageFileName),
+			ImageUrl:    fmt.Sprintf("%s/product/%s", os.Getenv("STORAGE_SERVICE_URL"), productEntity.ImageFileName),
 		},
 		nil
 
