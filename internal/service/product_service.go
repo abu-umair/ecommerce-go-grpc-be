@@ -77,6 +77,11 @@ func (ps *productService) DetailProduct(ctx context.Context, request *product.De
 	}
 
 	//* Apabila null, kita return not found
+	if productEntity == nil {
+		return &product.DetailProductResponse{
+			Base: utils.NotFoundResponse("Product not found"),
+		}, nil
+	}
 
 	//* Kirim response
 
