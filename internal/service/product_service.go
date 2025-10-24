@@ -100,18 +100,24 @@ func (ps *productService) DetailProduct(ctx context.Context, request *product.De
 
 func (ps *productService) EditProduct(ctx context.Context, request *product.EditProductRequest) (*product.EditProductResponse, error) {
 	//* Validasi apakah id yang dikirim itu ada di DB
+	productEntity, err := ps.productRepository.GetProductById(ctx, request.Id) //?menggunakan GetProductById karena querynya sama
+	if err != nil {
+		return nil, err
+	}
+	if productEntity == nil {
+		return &product.EditProductResponse{
+			Base: utils.NotFoundResponse("Product not found"),
+		}, nil
+	}
 
+	//* Jika gambarnya ada, hapus gambar lama
 
-	//* Jika gambarnya ada, hapus gambar lama 
-
-	
-	//* Update ke DB 
-	
+	//* Update ke DB
 
 	//* Kirim response
 	return &product.EditProductResponse{
-			Base:        utils.SuccessResponse("Edit product success"),
-			Id:          request.Id,
+			Base: utils.SuccessResponse("Edit product success"),
+			Id:   request.Id,
 		},
 		nil
 
