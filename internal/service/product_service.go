@@ -18,7 +18,7 @@ import (
 type IProductService interface {
 	CreateProduct(ctx context.Context, request *product.CreateProductRequest) (*product.CreateProductResponse, error)
 	DetailProduct(ctx context.Context, request *product.DetailProductRequest) (*product.DetailProductResponse, error)
-	EditProduct(ctx context.Context, request *product.DetailProductRequest) (*product.DetailProductResponse, error)
+	EditProduct(ctx context.Context, request *product.EditProductRequest) (*product.EditProductResponse, error)
 }
 
 type productService struct {
@@ -99,6 +99,16 @@ func (ps *productService) DetailProduct(ctx context.Context, request *product.De
 }
 
 func (ps *productService) EditProduct(ctx context.Context, request *product.EditProductRequest) (*product.EditProductResponse, error) {
+	//* cek dulu apakah user admin ?
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if claims.Role != entity.UserRoleAdmin {
+		return nil, utils.UnauthenticatedResponse()
+	}
+
 	//* Validasi apakah id yang dikirim itu ada di DB
 	productEntity, err := ps.productRepository.GetProductById(ctx, request.Id) //?menggunakan GetProductById karena querynya sama
 	if err != nil {
@@ -113,6 +123,21 @@ func (ps *productService) EditProduct(ctx context.Context, request *product.Edit
 	//* Jika gambarnya ada, hapus gambar lama
 
 	//* Update ke DB
+	newProduct := entity.Product{
+		Id:            request.Id,
+		Name:          request.Name,
+		Description:   request.Description,
+		Price:         request.Price,
+		ImageFileName: request.ImageFileName,
+		UpdatedAt:     time.Now(),
+		UpdatedBy:     &claims.FullName,
+	}
+
+	err = ps.productRepository.UpdateProduct(ctx, &newProduct)
+
+	if err != nil {
+		return nil, err
+	}
 
 	//* Kirim response
 	return &product.EditProductResponse{
