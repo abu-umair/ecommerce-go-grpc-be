@@ -279,7 +279,7 @@ go run main.go
 ```
 
 ## E-Commerce Project - Produk
-### API Detail Produk
+### Implementasi Upload Gambar Produk
 #### History Steps
 1. Mendownload modul gofiber (dipilih karena mudah setupnya)
 ```bash
@@ -292,7 +292,7 @@ go run cmd/grpc/main.go
 ```
 
 ## E-Commerce Project - Produk
-### Implementasi Upload Gambar Produk
+### API Detail Produk
 #### History Steps
 1. Generate product.proto
 ```bash
