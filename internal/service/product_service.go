@@ -18,6 +18,7 @@ import (
 type IProductService interface {
 	CreateProduct(ctx context.Context, request *product.CreateProductRequest) (*product.CreateProductResponse, error)
 	DetailProduct(ctx context.Context, request *product.DetailProductRequest) (*product.DetailProductResponse, error)
+	EditProduct(ctx context.Context, request *product.DetailProductRequest) (*product.DetailProductResponse, error)
 }
 
 type productService struct {
@@ -92,6 +93,25 @@ func (ps *productService) DetailProduct(ctx context.Context, request *product.De
 			Description: productEntity.Description,
 			Price:       productEntity.Price,
 			ImageUrl:    fmt.Sprintf("%s/product/%s", os.Getenv("STORAGE_SERVICE_URL"), productEntity.ImageFileName),
+		},
+		nil
+
+}
+
+func (ps *productService) EditProduct(ctx context.Context, request *product.EditProductRequest) (*product.EditProductResponse, error) {
+	//* Validasi apakah id yang dikirim itu ada di DB
+
+
+	//* Jika gambarnya ada, hapus gambar lama 
+
+	
+	//* Update ke DB 
+	
+
+	//* Kirim response
+	return &product.EditProductResponse{
+			Base:        utils.SuccessResponse("Edit product success"),
+			Id:          request.Id,
 		},
 		nil
 
