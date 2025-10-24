@@ -305,3 +305,7 @@ go run cmd/grpc/main.go
 ```
 
 3. ambil ID dari table product, kemudian pastekan di postman (pada Detail Product)
+
+## E-Commerce Project - Produk
+### API Edit Produk
+#### History Steps
