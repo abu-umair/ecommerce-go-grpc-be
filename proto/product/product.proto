@@ -6,6 +6,7 @@ import "buf/validate/validate.proto";//?import validate ambil di auth.proto
 
 
 import "common/base_response.proto";
+import "common/pagination.proto";
 
 
 package product;
@@ -66,14 +67,19 @@ message DeleteProductResponse {
 }
 
 message ListProductRequest {
-  int32 current_page = 1; //?untuk melihat user srkarang pada page keberapa
-  int32 item_per_page = 2; //?mximum item per page
+  common.PaginationRequest pagination = 1;
+}
+
+message ListProductResponseItem {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string image_url = 5;
 }
 
 message ListProductResponse { //?untuk pagenation
   common.BaseResponse base = 1;
-  int32 current_page = 2; //?mengirimi responsenya
-  int32 total_page_count = 3; //?untuk melihat total page
-  int32 item_per_page = 4; //?untuk melihat item per page
-  int32 total_item_count = 5;//?untuk melihat total item
+  common.PaginationResponse pagination = 2;
+  repeated ListProductResponseItem data = 3;
 }
