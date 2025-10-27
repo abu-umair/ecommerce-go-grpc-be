@@ -4,7 +4,7 @@ option go_package = "github.com/abu-umair/ecommerce-go-grpc-be/pb/common";
 
 package common;
 
-message ListProductRequest {
+message PaginationRequest {
   int32 current_page = 1; 
   int32 item_per_page = 2;
 }
