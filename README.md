@@ -345,4 +345,8 @@ go run cmd/rest/main.go
 ## E-Commerce Project - Produk
 ### API List Produk
 #### History Steps
+1. Generate product.proto
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative product/product.proto
+```
 
