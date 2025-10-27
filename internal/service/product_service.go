@@ -129,7 +129,7 @@ func (ps *productService) EditProduct(ctx context.Context, request *product.Edit
 			if os.IsNotExist(err) {
 				return &product.EditProductResponse{
 					Base: utils.BadRequestResponse("Image not found"),
-				}, nil	
+				}, nil
 			}
 			return nil, err
 		}
@@ -162,6 +162,50 @@ func (ps *productService) EditProduct(ctx context.Context, request *product.Edit
 	return &product.EditProductResponse{
 			Base: utils.SuccessResponse("Edit product success"),
 			Id:   request.Id,
+		},
+		nil
+
+}
+
+// !utk delete, menggunakan soft delete tetapi imagenya tetap dihapus
+func (ps *productService) DeleteProduct(ctx context.Context, request *product.DeleteProductRequest) (*product.DeleteProductResponse, error) {
+	//* cek dulu apakah user admin ? (utk authorization sama dengan edit product krn hanya admin yg bisa delete)
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if claims.Role != entity.UserRoleAdmin {
+		return nil, utils.UnauthenticatedResponse()
+	}
+
+	//* Validasi apakah id yang dikirim itu ada di DB
+	productEntity, err := ps.productRepository.GetProductById(ctx, request.Id) //?menggunakan GetProductById karena querynya sama
+	if err != nil {
+		return nil, err
+	}
+
+	if productEntity == nil { //?jika tidak ada mkan return not found
+		return &product.DeleteProductResponse{
+			Base: utils.NotFoundResponse("Product not found"),
+		}, nil
+	}
+
+	//* Jika gambarnya ada, hapus gambar lama
+	err = ps.productRepository.DeleteProduct(ctx, request.Id, time.Now(), claims.FullName)
+	if err != nil {
+		return nil, err
+	}
+
+	imagePath := filepath.Join("storage", "product", productEntity.ImageFileName)
+	err = os.Remove(imagePath)
+	if err != nil {
+		return nil, err
+	}
+
+	//* Kirim response
+	return &product.DeleteProductResponse{
+			Base: utils.SuccessResponse("Delete product success"),
 		},
 		nil
 
