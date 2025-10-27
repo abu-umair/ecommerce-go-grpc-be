@@ -16,6 +16,7 @@ service ProductService {
   rpc DetailProduct(DetailProductRequest) returns (DetailProductResponse);
   rpc EditProduct(EditProductRequest) returns (EditProductResponse);
   rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+  rpc ListProduct(ListProductRequest) returns (ListProductResponse);
 }
 
 message CreateProductRequest {
@@ -62,4 +63,17 @@ message DeleteProductRequest {
 
 message DeleteProductResponse {
   common.BaseResponse base = 1;
+}
+
+message ListProductRequest {
+  int32 current_page = 1; //?untuk melihat user srkarang pada page keberapa
+  int32 item_per_page = 2; //?mximum item per page
+}
+
+message ListProductResponse { //?untuk pagenation
+  common.BaseResponse base = 1;
+  int32 current_page = 2; //?mengirimi responsenya
+  int32 total_page_count = 3; //?untuk melihat total page
+  int32 item_per_page = 4; //?untuk melihat item per page
+  int32 total_item_count = 5;//?untuk melihat total item
 }
