@@ -55,3 +55,11 @@ message EditProductResponse {
   common.BaseResponse base = 1;
   string id = 2;
 }
+
+message DeleteProductRequest {
+  string id = 1 [(buf.validate.field).string = { min_len: 1, max_len: 255 }];
+}
+
+message DeleteProductResponse {
+  common.BaseResponse base = 1;
+}
