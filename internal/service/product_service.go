@@ -121,6 +121,24 @@ func (ps *productService) EditProduct(ctx context.Context, request *product.Edit
 	}
 
 	//* Jika gambarnya ada, hapus gambar lama
+	if productEntity.ImageFileName != request.ImageFileName {
+		newImagePath := filepath.Join("storage", "product", request.ImageFileName)
+		_, err := os.Stat(newImagePath)
+		if err != nil {
+			if os.IsNotExist(err) {
+				return &product.EditProductResponse{
+					Base: utils.BadRequestResponse("Image not found"),
+				}, nil	
+			}
+			return nil, err
+		}
+
+		oldImagePath := filepath.Join("storage", "product", productEntity.ImageFileName)
+		err = os.Remove(oldImagePath)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	//* Update ke DB
 	newProduct := entity.Product{

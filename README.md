@@ -313,3 +313,14 @@ go run cmd/grpc/main.go
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative product/product.proto
 ```
+
+2. Run Server 
+```bash
+go run cmd/grpc/main.go
+```
+
+3. Run Server Rest Api 
+```bash
+go run cmd/rest/main.go
+```
+
