@@ -16,10 +16,17 @@ type authMiddleware struct {
 	cacheService *gocache.Cache
 }
 
+var publicApis = map[string]bool{
+	"/auth.AuthService/Login":               true,
+	"/auth.AuthService/Register":            true,
+	"/product.ProductService/DetailProduct": true,
+	"/product.ProductService/ListProduct":   true,
+}
+
 func (am *authMiddleware) Middleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
-	fmt.Println(info.FullMethod) //? hanya utk mendapatkan data FullMethod nya saja, 
+	fmt.Println(info.FullMethod) //? hanya utk mendapatkan data FullMethod nya saja,
 	log.Println(info.FullMethod)
-	if info.FullMethod == "/auth.AuthService/Login" || info.FullMethod == "/auth.AuthService/Register" ||  info.FullMethod == "/product.ProductService/DetailProduct"{
+	if publicApis[info.FullMethod] {
 		return handler(ctx, req)
 	}
 
