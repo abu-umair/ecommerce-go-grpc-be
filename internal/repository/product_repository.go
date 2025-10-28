@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
+	"github.com/abu-umair/ecommerce-go-grpc-be/pb/common"
 )
 
 type IProductRepository interface {
@@ -14,6 +15,7 @@ type IProductRepository interface {
 	GetProductById(ctx context.Context, id string) (*entity.Product, error)
 	UpdateProduct(ctx context.Context, product *entity.Product) error //*langsung return error
 	DeleteProduct(ctx context.Context, id string, deletedAt time.Time, deletedBy string) error
+	GetProductPagination(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Product, *common.PaginationResponse, error)
 }
 
 type productRepository struct {
@@ -107,6 +109,60 @@ func (repo *productRepository) DeleteProduct(ctx context.Context, id string, del
 	}
 
 	return nil
+}
+
+
+func (repo *productRepository) GetProductPagination(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Product, *common.PaginationResponse, error) {  //!mengambil daftar produk dari database dengan sistem pagination (halaman per halaman)
+
+	row := repo.db.QueryRowContext(ctx, "SELECT COUNT(*) FROM product WHERE is_deleted = false") //!untuk menghitung jumlah total produk yang tidak dihapus (is_deleted = false).
+	if row.Err() != nil {
+		return nil, nil, row.Err()
+	}
+
+	//!Menyimpan hasil COUNT(*) ke variabel totalCount.
+	var totalCount int
+	err := row.Scan(&totalCount)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	offset := (pagination.CurrentPage - 1) * pagination.ItemPerPage
+	totalPages := (totalCount + int(pagination.ItemPerPage) - 1) / int(pagination.ItemPerPage)
+
+	rows, err := repo.db.QueryContext(
+		ctx, "SELECT id, name, description, price, image_file_name FROM product WHERE is_deleted = false ORDER BY created_at DESC LIMIT $1 OFFSET $2",
+		pagination.ItemPerPage,
+		offset,
+	)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var products []*entity.Product = make([]*entity.Product, 0)
+	for rows.Next() { //!digunakan untuk membaca setiap baris hasil query.
+		var product entity.Product
+
+		err = rows.Scan( //!memasukkan hasil kolom ke field entity.Product.
+			&product.Id,
+			&product.Name,
+			&product.Description,
+			&product.Price,
+			&product.ImageFileName,
+		)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		products = append(products, &product)
+	}
+	paginationResponse := &common.PaginationResponse{//!Menyimpan metadata pagination agar frontend tahu:
+		CurrentPage:    pagination.CurrentPage, //!Halaman sekarang
+		ItemPerPage:    pagination.ItemPerPage,//!Jumlah item per halaman
+		TotalPageCount: int32(totalPages),//!Total halaman (TotalPageCount)
+		TotalItemCount: int32(totalCount),//!Total semua produk (TotalItemCount)
+	}
+	return products, paginationResponse, nil
 }
 
 func NewProductRepository(db *sql.DB) IProductRepository {
