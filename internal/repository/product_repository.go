@@ -18,6 +18,7 @@ type IProductRepository interface {
 	DeleteProduct(ctx context.Context, id string, deletedAt time.Time, deletedBy string) error
 	GetProductPagination(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Product, *common.PaginationResponse, error)
 	GetProductPaginationAdmin(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Product, *common.PaginationResponse, error)
+	GetProductHighlight(ctx context.Context) ([]*entity.Product, error)
 }
 
 type productRepository struct {
@@ -234,6 +235,38 @@ func (repo *productRepository) GetProductPaginationAdmin(ctx context.Context, pa
 		TotalItemCount: int32(totalCount),      //!Total semua produk (TotalItemCount)
 	}
 	return products, paginationResponse, nil
+}
+
+func (repo *productRepository) GetProductHighlight(ctx context.Context) ([]*entity.Product, error) {
+
+	rows, err := repo.db.QueryContext(
+		ctx,
+		"SELECT id, name, description, price, image_file_name FROM product WHERE is_deleted = false ORDER BY created_at DESC LIMIT 3",//?mengambil 3 data terbaru untuk highlight
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	var products []*entity.Product = make([]*entity.Product, 0)
+	for rows.Next() {
+		var productEntity entity.Product
+
+		err = rows.Scan( //?harus sesuai dengan urutan dari query diatas
+			&productEntity.Id,
+			&productEntity.Name,
+			&productEntity.Description,
+			&productEntity.Price,
+			&productEntity.ImageFileName,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		products = append(products, &productEntity)
+	}
+
+	return products, nil
 }
 
 func NewProductRepository(db *sql.DB) IProductRepository {
