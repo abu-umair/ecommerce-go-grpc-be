@@ -19,6 +19,7 @@ service ProductService {
   rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
   rpc ListProduct(ListProductRequest) returns (ListProductResponse);
   rpc ListProductAdmin(ListProductAdminRequest) returns (ListProductAdminResponse);
+  rpc HighlightProducts(HighlightProductsRequest) returns (HighlightProductsResponse);
 }
 
 message CreateProductRequest {
