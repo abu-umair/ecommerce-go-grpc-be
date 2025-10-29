@@ -105,3 +105,19 @@ message ListProductAdminResponse { //?untuk pagenation
   common.PaginationResponse pagination = 2;
   repeated ListProductAdminResponseItem data = 3;
 }
+
+//!HighlightProducts 
+message HighlightProductsRequest {} //?cukup dikosongkan karena tidak memerlukan request apapun, cuma butuh mendapatkan data Productnya
+
+message HighlightProductsResponseItem {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string image_url = 5;
+}
+
+message HighlightProductsResponse { //?untuk pagenation
+  common.BaseResponse base = 1;
+  repeated HighlightProductsResponseItem data = 2;
+}
