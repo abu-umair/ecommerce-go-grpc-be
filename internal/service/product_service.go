@@ -21,6 +21,7 @@ type IProductService interface {
 	EditProduct(ctx context.Context, request *product.EditProductRequest) (*product.EditProductResponse, error)
 	DeleteProduct(ctx context.Context, request *product.DeleteProductRequest) (*product.DeleteProductResponse, error)
 	ListProduct(ctx context.Context, request *product.ListProductRequest) (*product.ListProductResponse, error)
+	ListProductAdmin(ctx context.Context, request *product.ListProductAdminRequest) (*product.ListProductAdminResponse, error)
 }
 
 type productService struct {
@@ -213,7 +214,7 @@ func (ps *productService) DeleteProduct(ctx context.Context, request *product.De
 }
 
 func (ps *productService) ListProduct(ctx context.Context, request *product.ListProductRequest) (*product.ListProductResponse, error) {
-	//*Ambil data produk dari repository 
+	//*Ambil data produk dari repository
 	products, paginationResponse, err := ps.productRepository.GetProductPagination(ctx, request.Pagination)
 	if err != nil {
 		return nil, err
@@ -222,7 +223,7 @@ func (ps *productService) ListProduct(ctx context.Context, request *product.List
 	//*Siapkan slice kosong untuk menampung response item
 	var data []*product.ListProductResponseItem = make([]*product.ListProductResponseItem, 0)
 
-	//*Loop setiap produk dan ubah jadi format response 
+	//*Loop setiap produk dan ubah jadi format response
 	for _, prod := range products {
 		data = append(data, &product.ListProductResponseItem{
 			Id:          prod.Id,
@@ -236,6 +237,47 @@ func (ps *productService) ListProduct(ctx context.Context, request *product.List
 	//* Kirim response
 	return &product.ListProductResponse{
 			Base:       utils.SuccessResponse("Get List product success"),
+			Pagination: paginationResponse,
+			Data:       data,
+		},
+		nil
+
+}
+
+func (ps *productService) ListProductAdmin(ctx context.Context, request *product.ListProductAdminRequest) (*product.ListProductAdminResponse, error) {
+	//* cek dulu apakah user admin ? (utk authorization)
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if claims.Role != entity.UserRoleAdmin {
+		return nil, utils.UnauthenticatedResponse()
+	}
+
+	//*Ambil data produk dari repository
+	products, paginationResponse, err := ps.productRepository.GetProductPaginationAdmin(ctx, request.Pagination)
+	if err != nil {
+		return nil, err
+	}
+
+	//*Siapkan slice kosong untuk menampung response item
+	var data []*product.ListProductAdminResponseItem = make([]*product.ListProductAdminResponseItem, 0)
+
+	//*Loop setiap produk dan ubah jadi format response
+	for _, prod := range products {
+		data = append(data, &product.ListProductAdminResponseItem{
+			Id:          prod.Id,
+			Name:        prod.Name,
+			Description: prod.Description,
+			Price:       prod.Price,
+			ImageUrl:    fmt.Sprintf("%s/product/%s", os.Getenv("STORAGE_SERVICE_URL"), prod.ImageFileName),
+		})
+	}
+
+	//* Kirim response
+	return &product.ListProductAdminResponse{
+			Base:       utils.SuccessResponse("Get List product admin success"),
 			Pagination: paginationResponse,
 			Data:       data,
 		},
