@@ -376,7 +376,7 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 #### History Steps
 1. Run Server
 ```bash
-go run main.go
+go run cmd/grpc/main.go
 ```
 
 2. juga Run gRPC web proxy
@@ -389,7 +389,7 @@ grpcwebproxy --backend_addr=localhost:50052 --server_bind_address=0.0.0.0 --serv
 
 1. Run Server
 ```bash
-go run main.go
+go run cmd/grpc/main.go
 ```
 
 2. juga Run gRPC web proxy
