@@ -3,12 +3,15 @@ package handler
 import (
 	"context"
 
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/service"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/cart"
 )
 
 type cartHandler struct {
 	cart.UnimplementedCartServiceServer
+
+	cartService service.ICartService
 }
 
 func (ch *cartHandler) AddProductToCart(ctx context.Context, request *cart.AddProductToCartRequest) (*cart.AddProductToCartResponse, error) {
@@ -29,6 +32,8 @@ func (ch *cartHandler) AddProductToCart(ctx context.Context, request *cart.AddPr
 	return res, nil
 }
 
-func NewCartHandler() *cartHandler {
-	return &cartHandler{}
+func NewCartHandler(cartService service.ICartService) *cartHandler {
+	return &cartHandler{
+		cartService: cartService,
+	}
 }
