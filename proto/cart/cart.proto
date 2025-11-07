@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "common/base_response.proto";
+import "buf/validate/validate.proto";
 
 package cart;
 
@@ -9,7 +10,7 @@ service CartService {
 }
 
 message AddProductToCartRequest {
-  string product_id = 1;
+  string product_id = 1[(buf.validate.field).string = { min_len: 1, max_len: 255 }];
 }
 
 message AddProductToCartResponse {
