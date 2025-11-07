@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "github.com/abu-umair/ecommerce-go-grpc-be/pb/cart";
+
 import "common/base_response.proto";
 import "buf/validate/validate.proto";
 
