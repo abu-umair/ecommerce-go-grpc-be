@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "common/base_response.proto";
+
+package cart;
+
+service CartService {
+  rpc AddProductToCart(AddProductToCartRequest) returns (AddProductToCartResponse);
+}
+
+message AddProductToCartRequest {
+  string product_id = 1;
+}
+
+message AddProductToCartResponse {
+  common.BaseResponse base = 1;
+  string id=2;
+}
