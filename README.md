@@ -404,3 +404,6 @@ go run cmd/rest/main.go
 
 ### Integrasi List Produk Admin FE
 #### History Steps
+
+### Integrasi Highlight Produk FE
+#### History Steps
