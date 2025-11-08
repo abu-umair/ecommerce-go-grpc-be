@@ -10,6 +10,7 @@ import (
 
 type ICartRepository interface {
 	GetCartByProductAndUserId(ctx context.Context, productId, userId string) (*entity.UserCart, error)
+	CreateNewCart(ctx context.Context, cart *entity.UserCart) error
 }
 
 type cartRepository struct {
@@ -41,7 +42,7 @@ func (cr *cartRepository) GetCartByProductAndUserId(ctx context.Context, product
 	)
 
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows){
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
 
@@ -49,6 +50,26 @@ func (cr *cartRepository) GetCartByProductAndUserId(ctx context.Context, product
 	}
 
 	return &cartEntity, nil
+}
+
+func (cs *cartRepository) CreateNewCart(ctx context.Context, cart *entity.UserCart) error {
+	_, err := cs.db.ExecContext(
+		ctx,
+		"INSERT INTO user_cart (id, product_id, user_id, quantity, created_at, created_by, updated_at, updated_by) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+		cart.Id, //?inputkan cart kita
+		cart.ProductId,
+		cart.UserId,
+		cart.Quantity,
+		cart.CreatedAt,
+		cart.CreatedBy,
+		cart.UpdatedAt,
+		cart.UpdatedBy,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func NewCartRepository(db *sql.DB) ICartRepository {

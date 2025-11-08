@@ -2,11 +2,14 @@ package service
 
 import (
 	"context"
+	"time"
 
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
 	jwtentity "github.com/abu-umair/ecommerce-go-grpc-be/internal/entity/jwt"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/cart"
+	"github.com/google/uuid"
 )
 
 type ICartService interface {
@@ -50,7 +53,20 @@ func (cs *cartService) AddProductToCart(ctx context.Context, request *cart.AddPr
 		}, nil
 	}
 
-	//** belum -> insert
+	//** belum -> insert/create
+	newCartEntity := entity.UserCart{
+		Id:        uuid.NewString(),
+		UserId:    claims.Subject,
+		ProductId: request.ProductId,
+		Quantity:  1,
+		CreatedAt: time.Now(),
+		CreatedBy: claims.FullName,
+	}
+
+	err = cs.cartRepository.CreateNewCart(ctx, &newCartEntity)
+	if err != nil {
+		return nil, err
+	}
 
 	//* response
 	return &cart.AddProductToCartResponse{
