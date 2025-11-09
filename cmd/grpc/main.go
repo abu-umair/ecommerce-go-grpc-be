@@ -12,6 +12,7 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/service"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/auth"
+	"github.com/abu-umair/ecommerce-go-grpc-be/pb/cart"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/product"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
 	"github.com/joho/godotenv"
@@ -44,6 +45,10 @@ func main() { //?Sebagai gRpc server
 	productService := service.NewProductService(productRepository)
 	productHandler := handler.NewProductHandler(productService)
 
+	cartRepository := repository.NewCartRepository(db)
+	cartService := service.NewCartService(productRepository, cartRepository)
+	cartHandler := handler.NewCartHandler(cartService)
+
 	serv := grpc.NewServer(
 
 		grpc.ChainUnaryInterceptor(
@@ -54,6 +59,7 @@ func main() { //?Sebagai gRpc server
 
 	auth.RegisterAuthServiceServer(serv, authHandler)
 	product.RegisterProductServiceServer(serv, productHandler)
+	cart.RegisterCartServiceServer(serv, cartHandler)
 
 	if os.Getenv("ENVIRONMENT") == "dev" {
 		reflection.Register(serv)
