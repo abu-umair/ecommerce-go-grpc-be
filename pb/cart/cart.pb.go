@@ -160,7 +160,8 @@ type ListCartResponseItem struct {
 	ProductId       string                 `protobuf:"bytes,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	ProductName     string                 `protobuf:"bytes,2,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
 	ProductImageUrl string                 `protobuf:"bytes,3,opt,name=product_image_url,json=productImageUrl,proto3" json:"product_image_url,omitempty"`
-	Quantity        int64                  `protobuf:"varint,4,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	Price           float64                `protobuf:"fixed64,4,opt,name=price,proto3" json:"price,omitempty"` //?jika sudah production / sudah di consumsi FE, maka jangan diubah, tetapi ditaruh dibawahnya (tetapi ini belm production jd tdk mengapa)
+	Quantity        int64                  `protobuf:"varint,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -214,6 +215,13 @@ func (x *ListCartResponseItem) GetProductImageUrl() string {
 		return x.ProductImageUrl
 	}
 	return ""
+}
+
+func (x *ListCartResponseItem) GetPrice() float64 {
+	if x != nil {
+		return x.Price
+	}
+	return 0
 }
 
 func (x *ListCartResponseItem) GetQuantity() int64 {
@@ -287,13 +295,14 @@ const file_cart_cart_proto_rawDesc = "" +
 	"\x18AddProductToCartResponse\x12(\n" +
 	"\x04base\x18\x01 \x01(\v2\x14.common.BaseResponseR\x04base\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\"\x11\n" +
-	"\x0fListCartRequest\"\xa0\x01\n" +
+	"\x0fListCartRequest\"\xb6\x01\n" +
 	"\x14ListCartResponseItem\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x01 \x01(\tR\tproductId\x12!\n" +
 	"\fproduct_name\x18\x02 \x01(\tR\vproductName\x12*\n" +
-	"\x11product_image_url\x18\x03 \x01(\tR\x0fproductImageUrl\x12\x1a\n" +
-	"\bquantity\x18\x04 \x01(\x03R\bquantity\"n\n" +
+	"\x11product_image_url\x18\x03 \x01(\tR\x0fproductImageUrl\x12\x14\n" +
+	"\x05price\x18\x04 \x01(\x01R\x05price\x12\x1a\n" +
+	"\bquantity\x18\x05 \x01(\x03R\bquantity\"n\n" +
 	"\x10ListCartResponse\x12(\n" +
 	"\x04base\x18\x01 \x01(\v2\x14.common.BaseResponseR\x04base\x120\n" +
 	"\x05items\x18\x02 \x03(\v2\x1a.cart.ListCartResponseItemR\x05items2\x9b\x01\n" +

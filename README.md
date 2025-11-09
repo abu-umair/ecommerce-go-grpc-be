@@ -423,3 +423,7 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative cart/cart.proto
 ```
+2. Generate ulang cart.proto
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative cart/cart.proto
+```
