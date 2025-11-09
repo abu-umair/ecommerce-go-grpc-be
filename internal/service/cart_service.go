@@ -86,11 +86,21 @@ func (cs *cartService) AddProductToCart(ctx context.Context, request *cart.AddPr
 	}, nil
 }
 
-func(cs *cartService) ListCart(ctx context.Context, request *cart.ListCartRequest) (*cart.ListCartResponse, error) {
-	//* ambil auth user
+func (cs *cartService) ListCart(ctx context.Context, request *cart.ListCartRequest) (*cart.ListCartResponse, error) {
+	//* ambil auth user (yang sedang mengakses api ini)
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	//* query list cart dari db
 	//* join (table user_cart, product)
+	carts, err := cs.cartRepository.GetListCart(ctx, claims.Subject)
+	if err != nil {
+		return nil, err
+	}
+
+	//* build response nya
 
 	//* kirim response
 }

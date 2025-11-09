@@ -12,6 +12,7 @@ type ICartRepository interface {
 	GetCartByProductAndUserId(ctx context.Context, productId, userId string) (*entity.UserCart, error)
 	CreateNewCart(ctx context.Context, cart *entity.UserCart) error
 	UpdateCart(ctx context.Context, cart *entity.UserCart) error
+	GetListCart(ctx context.Context, userId string) ([]*entity.UserCart, error) //?menghasilkan array
 }
 
 type cartRepository struct {
@@ -73,23 +74,59 @@ func (cs *cartRepository) CreateNewCart(ctx context.Context, cart *entity.UserCa
 	return nil
 }
 
-//?method update hampir sama dg create
+// ?method update hampir sama dg create
 func (cs *cartRepository) UpdateCart(ctx context.Context, cart *entity.UserCart) error {
 	_, err := cs.db.ExecContext(
 		ctx,
 		"UPDATE user_cart SET product_id = $1, user_id = $2, quantity = $3, updated_at = $4, updated_by = $5 WHERE id = $6",
-		cart.ProductId,//?harus berurutan
+		cart.ProductId, //?harus berurutan
 		cart.UserId,
 		cart.Quantity,
 		cart.UpdatedAt,
 		cart.UpdatedBy,
-		cart.Id, 
+		cart.Id,
 	)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func (cr *cartRepository) GetListCart(ctx context.Context, userId string) ([]*entity.UserCart, error) {
+	//? mengambil data dari db
+	rows, err := cr.db.QueryContext(ctx, "SELECT uc.id, uc.product_id, uc.user_id, uc.quantity, uc.created_at, uc.created_by, uc.updated_at, uc.updated_by, p.id, p.name, p.image_file_name, p.price FROM user_cart uc JOIN product p ON uc.product_id = p.id WHERE uc.user_id = $1 AND p.is_deleted = false",
+		userId,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	var carts []*entity.UserCart = make([]*entity.UserCart, 0)
+	for rows.Next() {
+		var cart entity.UserCart
+		cart.Product = &entity.Product{}
+
+		err = rows.Scan(
+			&cart.Id,
+			&cart.ProductId,
+			&cart.UserId,
+			&cart.Quantity,
+			&cart.CreatedAt,
+			&cart.CreatedBy,
+			&cart.UpdatedAt,
+			&cart.UpdatedBy,
+			&cart.Product.Id,
+			&cart.Product.Name,
+			&cart.Product.ImageFileName,
+			&cart.Product.Price,
+		)
+		if err != nil {
+			return nil, err
+		}
+		carts = append(carts, &cart)
+	}
+	return carts, nil
 }
 
 func NewCartRepository(db *sql.DB) ICartRepository {
