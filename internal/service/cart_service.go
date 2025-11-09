@@ -47,9 +47,19 @@ func (cs *cartService) AddProductToCart(ctx context.Context, request *cart.AddPr
 
 	//** udah ada -> update
 	if cartEntity != nil {
+		now := time.Now()
+		cartEntity.Quantity += 1
+		cartEntity.UpdatedAt = &now
+		cartEntity.UpdatedBy = &claims.Subject
+
+		err = cs.cartRepository.UpdateCart(ctx, cartEntity)
+		if err != nil {
+			return nil, err
+		}
+
 		return &cart.AddProductToCartResponse{
 			Base: utils.SuccessResponse("Add Product to cart Success"),
-			Id:   "",
+			Id:   cartEntity.Id,
 		}, nil
 	}
 
@@ -71,7 +81,7 @@ func (cs *cartService) AddProductToCart(ctx context.Context, request *cart.AddPr
 	//* response
 	return &cart.AddProductToCartResponse{
 		Base: utils.SuccessResponse("Add Product to cart Success"),
-		Id:   "",
+		Id:   newCartEntity.Id,
 	}, nil
 }
 

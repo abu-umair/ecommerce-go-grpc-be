@@ -11,6 +11,7 @@ import (
 type ICartRepository interface {
 	GetCartByProductAndUserId(ctx context.Context, productId, userId string) (*entity.UserCart, error)
 	CreateNewCart(ctx context.Context, cart *entity.UserCart) error
+	UpdateCart(ctx context.Context, cart *entity.UserCart) error
 }
 
 type cartRepository struct {
@@ -64,6 +65,25 @@ func (cs *cartRepository) CreateNewCart(ctx context.Context, cart *entity.UserCa
 		cart.CreatedBy,
 		cart.UpdatedAt,
 		cart.UpdatedBy,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+//?method update hampir sama dg create
+func (cs *cartRepository) UpdateCart(ctx context.Context, cart *entity.UserCart) error {
+	_, err := cs.db.ExecContext(
+		ctx,
+		"UPDATE user_cart SET product_id = $1, user_id = $2, quantity = $3, updated_at = $4, updated_by = $5 WHERE id = $6",
+		cart.ProductId,//?harus berurutan
+		cart.UserId,
+		cart.Quantity,
+		cart.UpdatedAt,
+		cart.UpdatedBy,
+		cart.Id, 
 	)
 	if err != nil {
 		return err

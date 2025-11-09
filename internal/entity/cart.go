@@ -10,5 +10,5 @@ type UserCart struct {
 	CreatedAt time.Time
 	CreatedBy string
 	UpdatedAt *time.Time
-	UpdatedBy string
+	UpdatedBy *string
 }
