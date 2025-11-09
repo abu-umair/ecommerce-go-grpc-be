@@ -24,11 +24,12 @@ message AddProductToCartResponse {
 message ListCartRequest {}//?dikosongin, karena tidak memakai apapun, pagination jg tidak digunakan
 
 message ListCartResponseItem {
-  string product_id = 1;
-  string product_name = 2;
-  string product_image_url = 3;
-  double price = 4; //?jika sudah production / sudah di consumsi FE, maka jangan diubah, tetapi ditaruh dibawahnya (tetapi ini belm production jd tdk mengapa)
-  int64 quantity = 5;
+  string cart_id = 1;
+  string product_id = 2;
+  string product_name = 3;
+  string product_image_url = 4;
+  double product_price = 5; //?jika sudah production / sudah di consumsi FE, maka jangan diubah, tetapi ditaruh dibawahnya (tetapi ini belm production jd tdk mengapa)
+  int64 quantity = 6;
 }
 
 message ListCartResponse {

@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"fmt"
+	"os"
 	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
@@ -101,8 +103,23 @@ func (cs *cartService) ListCart(ctx context.Context, request *cart.ListCartReque
 	}
 
 	//* build response nya
+	var items []*cart.ListCartResponseItem = make([]*cart.ListCartResponseItem, 0)
+	for _, cartEntity := range carts {
+		item := cart.ListCartResponseItem{
+			ProductId:       cartEntity.Product.Id,
+			ProductName:     cartEntity.Product.Name,
+			ProductImageUrl: fmt.Sprintf("%s/ product/%s", os.Getenv("STORAGE_SERVICE_URL"), cartEntity.Product.ImageFileName),
+			ProductPrice:    cartEntity.Product.Price,
+			Quantity:        int64(cartEntity.Quantity),
+		}
+	}
+	items = append(items, &item)
 
 	//* kirim response
+	return &cart.ListCartResponse{
+		Base:  utils.SuccessResponse("Get list cart success"),
+		Items: items,
+	}, nil
 }
 
 func NewCartService(productRepository repository.IProductRepository, cartRepository repository.ICartRepository) ICartService {
