@@ -27,7 +27,8 @@ message ListCartResponseItem {
   string product_id = 1;
   string product_name = 2;
   string product_image_url = 3;
-  int64 quantity = 4;
+  double price = 4; //?jika sudah production / sudah di consumsi FE, maka jangan diubah, tetapi ditaruh dibawahnya (tetapi ini belm production jd tdk mengapa)
+  int64 quantity = 5;
 }
 
 message ListCartResponse {
