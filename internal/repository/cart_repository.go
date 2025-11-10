@@ -13,6 +13,7 @@ type ICartRepository interface {
 	CreateNewCart(ctx context.Context, cart *entity.UserCart) error
 	UpdateCart(ctx context.Context, cart *entity.UserCart) error
 	GetListCart(ctx context.Context, userId string) ([]*entity.UserCart, error) //?menghasilkan array
+	GetCartById(ctx context.Context, cartId string) (*entity.UserCart, error)
 }
 
 type cartRepository struct {
@@ -127,6 +128,37 @@ func (cr *cartRepository) GetListCart(ctx context.Context, userId string) ([]*en
 		carts = append(carts, &cart)
 	}
 	return carts, nil
+}
+
+func (cr *cartRepository) GetCartById(ctx context.Context, cartId string) (*entity.UserCart, error) {
+	row := cr.db.QueryRowContext( //? menggunakan 'QueryRowContext' karena itu hanya mengembalikan 1 baris saja
+		ctx,
+		"SELECT id, product_id, user_id, quantity, created_at, created_by, updated_at, updated_by FROM user_cart WHERE id = $1",
+		cartId,
+	)
+
+	if row.Err() != nil {
+		return nil, row.Err()
+	}
+
+	var cart entity.UserCart
+	err := row.Scan(
+		&cart.Id,
+		&cart.ProductId,
+		&cart.UserId,
+		&cart.Quantity,
+		&cart.CreatedAt,
+		&cart.CreatedBy,
+		&cart.UpdatedAt,
+		&cart.UpdatedBy,
+	)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
 }
 
 func NewCartRepository(db *sql.DB) ICartRepository {

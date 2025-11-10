@@ -135,6 +135,15 @@ func (cs *cartService) DeleteCart(ctx context.Context, request *cart.DeleteCartR
 	}
 
 	//* mendapatkan data cart
+	cartEntity, err := cs.cartRepository.GetCartById(ctx, request.CartId)
+	if err != nil {
+		return nil, err
+	}
+	if cartEntity == nil {
+		return &cart.DeleteCartResponse{
+			Base: utils.NotFoundResponse("Cart not found"),
+		}, nil
+	}
 
 	//* mencocokan data user id di cart dengan auth (jika tidak cocok , mengirimkan badRequest)
 
