@@ -146,6 +146,11 @@ func (cs *cartService) DeleteCart(ctx context.Context, request *cart.DeleteCartR
 	}
 
 	//* mencocokan data user id di cart dengan auth (jika tidak cocok , mengirimkan badRequest)
+	if cartEntity.UserId != claims.Subject {
+		return &cart.DeleteCartResponse{
+			Base: utils.BadRequestResponse("Cart user is is not matched"),
+		}, nil
+	}
 
 	//* delete (hard delete)
 
