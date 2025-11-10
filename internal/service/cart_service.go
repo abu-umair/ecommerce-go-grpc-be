@@ -166,6 +166,20 @@ func (cs *cartService) DeleteCart(ctx context.Context, request *cart.DeleteCartR
 
 func (cs *cartService) UpdateCartQuantity(ctx context.Context, request *cart.UpdateCartQuantityRequest) (*cart.UpdateCartQuantityResponse, error) {
 	//* get data cart by id
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	cartEntity, err := cs.cartRepository.GetCartById(ctx, request.CartId)
+	if err != nil {
+		return nil, err
+	}
+	if cartEntity == nil {
+		return &cart.UpdateCartQuantityResponse{
+			Base: utils.NotFoundResponse("Cart not found"),
+		}, nil
+	}
 
 	//* cocokan user id
 
