@@ -189,10 +189,32 @@ func (cs *cartService) UpdateCartQuantity(ctx context.Context, request *cart.Upd
 	}
 
 	//* update new quantity
+	if request.NewQuantity == 0 { //?jika new quantity == 0 maka delete
+		err = cs.cartRepository.DeleteCart(ctx, request.CartId)
+		if err != nil {
+			return nil, err
+		}
+
+		return &cart.UpdateCartQuantityResponse{
+			Base: utils.SuccessResponse("Update cart quantity success"),
+		}, nil
+	}
+
+	now := time.Now()
+	cartEntity.Quantity = int(request.NewQuantity)
+	cartEntity.UpdatedAt = &now
+	cartEntity.UpdatedBy = &claims.FullName
 
 	//* update ke db
+	err = cs.cartRepository.UpdateCart(ctx, cartEntity)
+	if err != nil {
+		return nil, err
+	}
 
 	//* success response
+	return &cart.UpdateCartQuantityResponse{
+		Base: utils.SuccessResponse("Update cart quantity success"),
+	}, nil
 }
 
 func NewCartService(productRepository repository.IProductRepository, cartRepository repository.ICartRepository) ICartService {
