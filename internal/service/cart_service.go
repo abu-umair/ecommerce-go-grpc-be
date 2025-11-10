@@ -128,6 +128,11 @@ func (cs *cartService) ListCart(ctx context.Context, request *cart.ListCartReque
 // ?membuat method delete
 func (cs *cartService) DeleteCart(ctx context.Context, request *cart.DeleteCartRequest) (*cart.DeleteCartResponse, error) {
 	//*mendapatkan user id nya dulu
+	//? ambil auth user (yang sedang mengakses api ini)
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	//* mendapatkan data cart
 
