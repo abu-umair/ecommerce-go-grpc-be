@@ -382,7 +382,7 @@ func (x *DeleteCartResponse) GetBase() *common.BaseResponse {
 type UpdateCartQuantityRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CartId        string                 `protobuf:"bytes,1,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`
-	NewQuantity   string                 `protobuf:"bytes,2,opt,name=new_quantity,json=newQuantity,proto3" json:"new_quantity,omitempty"` //?validasi gte = 0 artinya memungkinkan 0 ( tidak boleh negatif), jika 0 maka dihapus
+	NewQuantity   int64                  `protobuf:"varint,2,opt,name=new_quantity,json=newQuantity,proto3" json:"new_quantity,omitempty"` //?validasi gte = 0 artinya memungkinkan 0 ( tidak boleh negatif), jika 0 maka dihapus
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -424,11 +424,11 @@ func (x *UpdateCartQuantityRequest) GetCartId() string {
 	return ""
 }
 
-func (x *UpdateCartQuantityRequest) GetNewQuantity() string {
+func (x *UpdateCartQuantityRequest) GetNewQuantity() int64 {
 	if x != nil {
 		return x.NewQuantity
 	}
-	return ""
+	return 0
 }
 
 type UpdateCartQuantityResponse struct {
@@ -507,7 +507,7 @@ const file_cart_cart_proto_rawDesc = "" +
 	"\x19UpdateCartQuantityRequest\x12#\n" +
 	"\acart_id\x18\x01 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x18\xff\x01R\x06cartId\x12*\n" +
-	"\fnew_quantity\x18\x02 \x01(\tB\a\xbaH\x04\"\x02(\x00R\vnewQuantity\"F\n" +
+	"\fnew_quantity\x18\x02 \x01(\x03B\a\xbaH\x04\"\x02(\x00R\vnewQuantity\"F\n" +
 	"\x1aUpdateCartQuantityResponse\x12(\n" +
 	"\x04base\x18\x01 \x01(\v2\x14.common.BaseResponseR\x04base2\xb5\x02\n" +
 	"\vCartService\x12Q\n" +
