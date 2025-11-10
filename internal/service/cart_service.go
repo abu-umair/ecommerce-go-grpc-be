@@ -17,6 +17,7 @@ import (
 type ICartService interface {
 	AddProductToCart(ctx context.Context, request *cart.AddProductToCartRequest) (*cart.AddProductToCartResponse, error)
 	ListCart(ctx context.Context, request *cart.ListCartRequest) (*cart.ListCartResponse, error)
+	DeleteCart(ctx context.Context, request *cart.DeleteCartRequest) (*cart.DeleteCartResponse, error)
 }
 
 type cartService struct {
@@ -122,6 +123,19 @@ func (cs *cartService) ListCart(ctx context.Context, request *cart.ListCartReque
 		Base:  utils.SuccessResponse("Get list cart success"),
 		Items: items,
 	}, nil
+}
+
+// ?membuat method delete
+func (cs *cartService) DeleteCart(ctx context.Context, request *cart.DeleteCartRequest) (*cart.DeleteCartResponse, error) {
+	//*mendapatkan user id nya dulu
+
+	//* mendapatkan data cart
+
+	//* mencocokan data user id di cart dengan auth (jika tidak cocok , mengirimkan badRequest)
+
+	//* delete (hard delete)
+
+	//* kirim response
 }
 
 func NewCartService(productRepository repository.IProductRepository, cartRepository repository.ICartRepository) ICartService {
