@@ -182,6 +182,11 @@ func (cs *cartService) UpdateCartQuantity(ctx context.Context, request *cart.Upd
 	}
 
 	//* cocokan user id
+	if cartEntity.UserId != claims.Subject {
+		return &cart.UpdateCartQuantityResponse{
+			Base: utils.BadRequestResponse("Cart user is is not matched"),
+		}, nil
+	}
 
 	//* update new quantity
 
