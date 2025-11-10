@@ -158,6 +158,9 @@ func (cs *cartService) DeleteCart(ctx context.Context, request *cart.DeleteCartR
 		return nil, err
 	}
 	//* kirim response
+	return &cart.DeleteCartResponse{
+		Base: utils.SuccessResponse("Delete cart success"),
+	}, nil
 }
 
 func NewCartService(productRepository repository.IProductRepository, cartRepository repository.ICartRepository) ICartService {
