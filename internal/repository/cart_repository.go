@@ -159,6 +159,8 @@ func (cr *cartRepository) GetCartById(ctx context.Context, cartId string) (*enti
 		}
 		return nil, err
 	}
+
+	return &cart, nil
 }
 
 func NewCartRepository(db *sql.DB) ICartRepository {
