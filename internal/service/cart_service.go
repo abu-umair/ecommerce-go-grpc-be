@@ -153,7 +153,10 @@ func (cs *cartService) DeleteCart(ctx context.Context, request *cart.DeleteCartR
 	}
 
 	//* delete (hard delete)
-
+	err = cs.cartRepository.DeleteCart(ctx, request.CartId)
+	if err != nil {
+		return nil, err
+	}
 	//* kirim response
 }
 

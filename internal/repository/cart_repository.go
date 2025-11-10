@@ -14,6 +14,7 @@ type ICartRepository interface {
 	UpdateCart(ctx context.Context, cart *entity.UserCart) error
 	GetListCart(ctx context.Context, userId string) ([]*entity.UserCart, error) //?menghasilkan array
 	GetCartById(ctx context.Context, cartId string) (*entity.UserCart, error)
+	DeleteCart(ctx context.Context, cartId string) error
 }
 
 type cartRepository struct {
@@ -161,6 +162,20 @@ func (cr *cartRepository) GetCartById(ctx context.Context, cartId string) (*enti
 	}
 
 	return &cart, nil
+}
+
+func (cr *cartRepository) DeleteCart(ctx context.Context, cartId string) error {
+	_, err := cr.db.ExecContext( //?menangkap errornya saja (resultnya tidak)
+		ctx,
+		"DELETE FROM user_cart WHERE id = $1",
+		cartId,
+	)
+
+	if err != nil {
+		return err
+	}
+
+	return nil //?mengembalikan ke user
 }
 
 func NewCartRepository(db *sql.DB) ICartRepository {
