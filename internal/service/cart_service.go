@@ -111,7 +111,7 @@ func (cs *cartService) ListCart(ctx context.Context, request *cart.ListCartReque
 			CartId:          cartEntity.Id,
 			ProductId:       cartEntity.Product.Id,
 			ProductName:     cartEntity.Product.Name,
-			ProductImageUrl: fmt.Sprintf("%s/ product/%s", os.Getenv("STORAGE_SERVICE_URL"), cartEntity.Product.ImageFileName),
+			ProductImageUrl: fmt.Sprintf("%s/product/%s", os.Getenv("STORAGE_SERVICE_URL"), cartEntity.Product.ImageFileName),
 			ProductPrice:    cartEntity.Product.Price,
 			Quantity:        int64(cartEntity.Quantity),
 		}
