@@ -19,6 +19,7 @@ func ErrorMiddleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, h
 		}
 	}()
 	res, err := handler(ctx, req) //?memanggil handler disertai dengan context dan requestnya
+	log.Println(err)//?menampilkan error di postman
 
 	if err != nil {
 		log.Println(err)
