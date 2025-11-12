@@ -447,3 +447,7 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ## E-Commerce Project - Order
 ### API Create Order / Checkout
 #### History Steps
+1. Generate order.proto
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative order/order.proto
+```
