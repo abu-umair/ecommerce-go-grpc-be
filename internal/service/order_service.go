@@ -47,6 +47,11 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 
 	var total float64 = 0
 	for _, p := range request.Products {
+		if productMap[p.Id] == nil { //?menambahkan product notfound
+			return &order.CreateOrderResponse{
+				Base: utils.NotFoundResponse(fmt.Sprintf("Product %s not found", p.Id)),
+			}, nil
+		}
 		total += productMap[p.Id].Price * float64(p.Quantity)
 	}
 
