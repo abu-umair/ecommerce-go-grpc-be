@@ -47,9 +47,10 @@ func (os *orderRepository) GetNumbering(ctx context.Context, module string) (*en
 }
 
 func (or *orderRepository) CreateOrder(ctx context.Context, order *entity.Order) error {
+
 	_, err := or.db.ExecContext(
 		ctx,
-		"INSERT INTO \"order\" (id, number, user_id, order_status_code, user_full_name, address, phone_number, notes, total, expired_at, created_at,created_by, updated_at, updated_at, deleted_at, deleted_by, is_deleted) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)",
+		"INSERT INTO \"order\" (id, number, user_id, order_status_code, user_full_name, address, phone_number, notes, total, expired_at, created_at,created_by, updated_at, updated_by, deleted_at, deleted_by, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)",
 		order.Id,
 		order.Number,
 		order.UserId,
@@ -66,7 +67,7 @@ func (or *orderRepository) CreateOrder(ctx context.Context, order *entity.Order)
 		order.UpdatedBy,
 		order.DeletedAt,
 		order.DeletedBy,
-		order.IsDeleted
+		order.IsDeleted, //?typo
 	)
 
 	if err != nil {
@@ -94,7 +95,7 @@ func (or *orderRepository) UpdateNumbering(ctx context.Context, numbering *entit
 func (or *orderRepository) CreateOrderItem(ctx context.Context, orderItem *entity.OrderItem) error {
 	_, err := or.db.ExecContext(
 		ctx,
-		"INSERT INTO order_item (id, product_id,product_name, product_image_file_name,product_price, quantity, order_id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by, is_deleted) VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
+		"INSERT INTO order_item (id, product_id,product_name, product_image_file_name,product_price, quantity, order_id, created_at, created_by, updated_at, updated_by, deleted_at, deleted_by, is_deleted) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
 		orderItem.Id,
 		orderItem.ProductId,
 		orderItem.ProductName,
