@@ -90,8 +90,9 @@ func (repo *productRepository) GetProductByIds(ctx context.Context, ids []string
 
 	rows, err := repo.db.QueryContext(
 		ctx,
-		"SELECT id,name,price, image_file_name FROM product WHERE id IN(%s) AND is_deleted = false",
-		strings.Join(queryIds, ","), //?untuk menggabungkan array diatas menjadi single string
+		fmt.Sprintf(
+			"SELECT id,name,price, image_file_name FROM product WHERE id IN(%s) AND is_deleted = false",
+			strings.Join(queryIds, ",")), //?untuk menggabungkan array diatas menjadi single string
 	)
 
 	if err != nil {
