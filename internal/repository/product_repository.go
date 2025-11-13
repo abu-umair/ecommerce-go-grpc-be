@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
@@ -14,6 +15,7 @@ import (
 type IProductRepository interface {
 	CreateNewProduct(ctx context.Context, product *entity.Product) error
 	GetProductById(ctx context.Context, id string) (*entity.Product, error)
+	GetProductByIds(ctx context.Context, ids []string) ([]*entity.Product, error)
 	UpdateProduct(ctx context.Context, product *entity.Product) error //*langsung return error
 	DeleteProduct(ctx context.Context, id string, deletedAt time.Time, deletedBy string) error
 	GetProductPagination(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Product, *common.PaginationResponse, error)
@@ -78,6 +80,44 @@ func (repo *productRepository) GetProductById(ctx context.Context, id string) (*
 	}
 
 	return &productEntity, nil
+}
+
+func (repo *productRepository) GetProductByIds(ctx context.Context, ids []string) ([]*entity.Product, error) {
+	queryIds := make([]string, len(ids))
+	for i, id := range ids {
+		queryIds[i] = fmt.Sprintf("'%s'", id)
+	}
+
+	rows, err := repo.db.QueryContext(
+		ctx,
+		"SELECT id,name,price, image_file_name FROM product WHERE id IN(%s) AND is_deleted = false",
+		strings.Join(queryIds, ","), //?untuk menggabungkan array diatas menjadi single string
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var products []*entity.Product = make([]*entity.Product, 0)
+	for rows.Next() {
+
+		var productEntity entity.Product
+		err = rows.Scan(
+			&productEntity.Id,
+			&productEntity.Name,
+			&productEntity.Price,
+			&productEntity.ImageFileName,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		products = append(products, &productEntity)
+	}
+
+	return products, nil
+
 }
 
 func (repo *productRepository) UpdateProduct(ctx context.Context, product *entity.Product) error {
@@ -241,7 +281,7 @@ func (repo *productRepository) GetProductHighlight(ctx context.Context) ([]*enti
 
 	rows, err := repo.db.QueryContext(
 		ctx,
-		"SELECT id, name, description, price, image_file_name FROM product WHERE is_deleted = false ORDER BY created_at DESC LIMIT 3",//?mengambil 3 data terbaru untuk highlight
+		"SELECT id, name, description, price, image_file_name FROM product WHERE is_deleted = false ORDER BY created_at DESC LIMIT 3", //?mengambil 3 data terbaru untuk highlight
 	)
 	if err != nil {
 		return nil, err
