@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -18,13 +19,20 @@ type IOrderService interface {
 }
 
 type orderService struct {
+	db                *sql.DB
 	orderRepository   repository.IOrderRepository
 	productRepository repository.IProductRepository
 }
 
 func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOrderRequest) (*order.CreateOrderResponse, error) {
+	tx, err := os.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	orderRepo := os.orderRepository.WithTransaction(tx) //? sydah terintegrasi, dan akan menggantikan semua 'os.orderRepository'
+
 	//* simpan 'order' ke database
-	numbering, err := os.orderRepository.GetNumbering(ctx, "order")
+	numbering, err := orderRepo.GetNumbering(ctx, "order")
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +86,7 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 		CreatedBy:       claims.FullName,
 	}
 
-	err = os.orderRepository.CreateOrder(ctx, &orderEntity)
+	err = orderRepo.CreateOrder(ctx, &orderEntity)
 	if err != nil {
 		return nil, err
 	}
@@ -98,14 +106,14 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 			CreatedBy:            claims.FullName,
 		}
 
-		err = os.orderRepository.CreateOrderItem(ctx, &orderItem)
+		err = orderRepo.CreateOrderItem(ctx, &orderItem)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	numbering.Number++
-	err = os.orderRepository.UpdateNumbering(ctx, numbering)
+	err = orderRepo.UpdateNumbering(ctx, numbering)
 	if err != nil {
 		return nil, err
 	}
@@ -115,8 +123,9 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 	}, nil
 }
 
-func NewOrderService(orderRepository repository.IOrderRepository, productRepository repository.IProductRepository) IOrderService {
+func NewOrderService(db *sql.DB, orderRepository repository.IOrderRepository, productRepository repository.IProductRepository) IOrderService {
 	return &orderService{
+		db:                db,
 		orderRepository:   orderRepository,
 		productRepository: productRepository,
 	}
