@@ -30,7 +30,7 @@ func (os *orderRepository) WithTransaction(tx *sql.Tx) IOrderRepository {
 func (os *orderRepository) GetNumbering(ctx context.Context, module string) (*entity.Numbering, error) {
 	row := os.db.QueryRowContext(
 		ctx,
-		"SELECT module, number FROM numbering WHERE module = $1",
+		"SELECT module, number FROM numbering WHERE module = $1 FOR UPDATE", //?for update : memungkinkan mengisi increment hanya 1 user
 		module,
 	)
 
