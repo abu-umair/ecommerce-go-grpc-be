@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"runtime/debug"
 	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
@@ -29,6 +30,24 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 	if err != nil {
 		return nil, err
 	}
+
+	defer func() {
+		if e := recover(); e != nil {
+			if tx != nil {
+				tx.Rollback()//?rollback jika ada error saan runtime
+			}
+
+			debug.PrintStack()//?agar ada stock tracenya yang digunakan utk debug
+			panic(e)//?agar bisa nyampai ke Middleware
+		}
+	}()
+
+	defer func() {
+		if err != nil && tx != nil {
+			tx.Rollback() //?rollback jika ada error
+		}
+	}()
+
 	orderRepo := os.orderRepository.WithTransaction(tx)     //? sydah terintegrasi, dan akan menggantikan semua 'os.orderRepository'
 	productRepo := os.productRepository.WithTransaction(tx) //? sydah terintegrasi, dan akan menggantikan semua 'os.productRepository'
 
