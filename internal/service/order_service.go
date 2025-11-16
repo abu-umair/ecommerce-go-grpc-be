@@ -111,6 +111,8 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 		return nil, err
 	}
 
+	// panic("test")
+
 	//* iterasi semua data product di 'request'
 	//* setiap iterasinya, simpan 'order_item' ke database
 	for _, p := range request.Products {
