@@ -29,7 +29,8 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 	if err != nil {
 		return nil, err
 	}
-	orderRepo := os.orderRepository.WithTransaction(tx) //? sydah terintegrasi, dan akan menggantikan semua 'os.orderRepository'
+	orderRepo := os.orderRepository.WithTransaction(tx)     //? sydah terintegrasi, dan akan menggantikan semua 'os.orderRepository'
+	productRepo := os.productRepository.WithTransaction(tx) //? sydah terintegrasi, dan akan menggantikan semua 'os.productRepository'
 
 	//* simpan 'order' ke database
 	numbering, err := orderRepo.GetNumbering(ctx, "order")
@@ -43,7 +44,7 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 		productIds[i] = request.Products[i].Id
 	}
 
-	products, err := os.productRepository.GetProductByIds(ctx, productIds)
+	products, err := productRepo.GetProductByIds(ctx, productIds)
 	if err != nil {
 		return nil, err
 	}
@@ -117,6 +118,12 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 	if err != nil {
 		return nil, err
 	}
+
+	err = tx.Commit() //?harus dicommit agar data tersimpan
+	if err != nil {
+		return nil, err
+	}
+
 	return &order.CreateOrderResponse{
 		Base: utils.SuccessResponse("Created order success"),
 		Id:   orderEntity.Id,
