@@ -26,6 +26,12 @@ type orderService struct {
 }
 
 func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOrderRequest) (*order.CreateOrderResponse, error) {
+	//? ambil auth user (yang sedang mengakses api ini)
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	tx, err := os.db.Begin()
 	if err != nil {
 		return nil, err
@@ -34,11 +40,11 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 	defer func() {
 		if e := recover(); e != nil {
 			if tx != nil {
-				tx.Rollback()//?rollback jika ada error saan runtime
+				tx.Rollback() //?rollback jika ada error saan runtime
 			}
 
-			debug.PrintStack()//?agar ada stock tracenya yang digunakan utk debug
-			panic(e)//?agar bisa nyampai ke Middleware
+			debug.PrintStack() //?agar ada stock tracenya yang digunakan utk debug
+			panic(e)           //?agar bisa nyampai ke Middleware
 		}
 	}()
 
@@ -81,12 +87,6 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 			}, nil
 		}
 		total += productMap[p.Id].Price * float64(p.Quantity)
-	}
-
-	//? ambil auth user (yang sedang mengakses api ini)
-	claims, err := jwtentity.GetClaimsFromContext(ctx)
-	if err != nil {
-		return nil, err
 	}
 
 	now := time.Now()
