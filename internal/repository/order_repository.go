@@ -127,7 +127,7 @@ func (or *orderRepository) CreateOrderItem(ctx context.Context, orderItem *entit
 	return nil
 }
 
-func NewOrderRepository(db *sql.DB) IOrderRepository {
+func NewOrderRepository(db database.DatabaseQuery) IOrderRepository {
 	return &orderRepository{
 		db: db,
 	}
