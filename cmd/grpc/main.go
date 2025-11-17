@@ -18,6 +18,7 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
 	"github.com/joho/godotenv"
 	gocache "github.com/patrickmn/go-cache"
+	"github.com/xendit/xendit-go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -25,6 +26,8 @@ import (
 func main() { //?Sebagai gRpc server
 	ctx := context.Background()
 	godotenv.Load()
+
+	xendit.Opt.SecretKey = os.Getenv("XENDIT_SECRET")
 
 	lis, err := net.Listen("tcp", ":50052") //? mengembalikan 2 value yaitu listener dan error
 	if err != nil {
