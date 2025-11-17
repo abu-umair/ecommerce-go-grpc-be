@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	operatingsystem "os"
 	"runtime/debug"
 	"time"
 
@@ -13,6 +14,8 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/order"
 	"github.com/google/uuid"
+	"github.com/xendit/xendit-go"
+	"github.com/xendit/xendit-go/invoice"
 )
 
 type IOrderService interface {
@@ -105,6 +108,36 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 		CreatedAt:       now,
 		CreatedBy:       claims.FullName,
 	}
+	//? dibuat sebelum diinputkan ke database
+	invoiceItems := make([]xendit.InvoiceItem, 0)
+	for _, p := range request.Products { //?mapping untuk mengisi invoice product
+		prod := productMap[p.Id]
+		if prod != nil {
+			invoiceItems = append(invoiceItems, xendit.InvoiceItem{
+				Name:     prod.Name,
+				Price:    prod.Price,
+				Quantity: int(p.Quantity),
+			})
+		}
+	}
+	xenditInvoice, xenditErr := invoice.CreateWithContext(ctx, &invoice.CreateParams{
+		ExternalID: orderEntity.Id,
+		Amount:     total,
+		Customer: xendit.InvoiceCustomer{
+			GivenNames: claims.FullName,
+		},
+		Currency:           "IDR",
+		SuccessRedirectURL: fmt.Sprintf("%s/checkout/%s/success", operatingsystem.Getenv("FRONTEND_BASE_URL"), orderEntity.Id),
+		Items:              invoiceItems,
+		FailureRedirectURL: fmt.Sprintf("%s/checkout/%s/failure", operatingsystem.Getenv("FRONTEND_BASE_URL"), orderEntity.Id),
+	})
+
+	if xenditErr != nil {
+		return nil, xenditErr
+	}
+
+	orderEntity.XenditInvoiceId = &xenditInvoice.ID
+	orderEntity.XenditInvoiceUrl = &xenditInvoice.InvoiceURL
 
 	err = orderRepo.CreateOrder(ctx, &orderEntity)
 	if err != nil {
