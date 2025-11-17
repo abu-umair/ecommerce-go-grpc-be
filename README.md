@@ -465,3 +465,8 @@ go run cmd/grpc/main.go
 ### Perubahan API Hapus Produk
 #### History Steps
 1. Saat ini ketika dihapus produk, maka gambarnya juga akan terhapus, permasalahannya ketika orderan selesai, tiba-tiba gambarnya dan deskripsinya terhapus (atau sudah diupdate), maka tujuan kali ini adalah menghindari problem seperti diatas
+
+
+### Setup Xendit Payment Gateway
+#### History Steps
+1. 
