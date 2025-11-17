@@ -460,3 +460,8 @@ go run cmd/grpc/main.go
 
 ### Implementasi Transaksi API Buat Order
 #### History Steps
+
+
+### Perubahan API Hapus Produk
+#### History Steps
+1. Saat ini ketika dihapus produk, maka gambarnya juga akan terhapus, permasalahannya ketika orderan selesai, tiba-tiba gambarnya dan deskripsinya terhapus (atau sudah diupdate), maka tujuan kali ini adalah menghindari problem seperti diatas
