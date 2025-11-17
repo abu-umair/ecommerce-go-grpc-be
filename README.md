@@ -484,3 +484,7 @@ go get github.com/xendit/xendit-go/utils/validator@v1.0.25
 
 ### Setup Webhook Xendit
 #### History Steps
+1. menjalankan ngrok untuk webhook xendit
+```bash
+ngrok http 4000
+``` 
