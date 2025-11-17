@@ -469,4 +469,7 @@ go run cmd/grpc/main.go
 
 ### Setup Xendit Payment Gateway
 #### History Steps
-1. 
+1. install package xendit
+```bash
+go get github.com/xendit/xendit-go
+```
