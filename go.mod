@@ -22,8 +22,12 @@ require (
 	cel.dev/expr v0.24.0 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
+	github.com/go-playground/locales v0.13.0 // indirect
+	github.com/go-playground/universal-translator v0.17.0 // indirect
+	github.com/go-playground/validator/v10 v10.2.0 // indirect
 	github.com/google/cel-go v0.25.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
+	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect

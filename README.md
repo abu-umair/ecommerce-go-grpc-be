@@ -477,3 +477,7 @@ go get github.com/xendit/xendit-go
 
 ### Integrasi Xendit dengan API Create Ord
 #### History Steps
+1. menjalankan perintah xendit agar packagenya lengkap
+```bash
+go get github.com/xendit/xendit-go/utils/validator@v1.0.25
+``` 
