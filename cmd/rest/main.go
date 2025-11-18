@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"mime"
 	"net/http"
@@ -8,8 +9,12 @@ import (
 	"path"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/handler"
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/service"
+	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/joho/godotenv"
 )
 
 func handleGetFileName(c *fiber.Ctx) error {
@@ -40,10 +45,14 @@ func handleGetFileName(c *fiber.Ctx) error {
 }
 
 func main() {
+	godotenv.Load()
+	ctx := context.Background()
 	app := fiber.New()
 
-
-	webhookHandler := handler.NewWebhookHandler()
+	db := database.ConnectDB(ctx, os.Getenv("DB_URI"))
+	orderRepository := repository.NewOrderRepository(db)
+	webhookService := service.NewWebhookService(orderRepository)
+	webhookHandler := handler.NewWebhookHandler(webhookService)
 
 	app.Use(cors.New())
 
@@ -51,7 +60,7 @@ func main() {
 
 	app.Post("/product/upload", handler.UploadProductImageHandler)
 
-	app.Post("/webhook/xendit/invoice", webhookHandler.ReceiveInvoice)//? endpoint webhook
+	app.Post("/webhook/xendit/invoice", webhookHandler.ReceiveInvoice) //? endpoint webhook
 
 	app.Listen(":4000")
 
