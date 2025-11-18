@@ -29,6 +29,8 @@ func (wh *webhookHandler) ReceiveInvoice(c *fiber.Ctx) error {
 	return c.SendStatus(http.StatusOK)
 }
 
-func NewWebhookHandler() *webhookHandler {
-	return &webhookHandler{}
+func NewWebhookHandler(webhookService service.IWebhookService) *webhookHandler {
+	return &webhookHandler{
+		webhookService: webhookService,
+	}
 }
