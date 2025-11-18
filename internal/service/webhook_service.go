@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/dto"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
@@ -27,6 +28,13 @@ func (ws *webhookService) ReceiveInvoice(ctx context.Context, request *dto.Xendi
 	}
 
 	//* update entity
+	now := time.Now()
+	updatedBy := "System"
+	orderEntity.UpdatedAt = &now
+	orderEntity.UpdatedBy = &updatedBy
+	orderEntity.XenditPaidAt = &now
+	orderEntity.XenditPaymentChannel = &request.PaymentChannel
+	orderEntity.XenditPaymentMethod = &request.PaymentMethod
 
 	//* proses update db
 	return nil
