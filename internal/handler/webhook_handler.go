@@ -1,16 +1,31 @@
 package handler
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/dto"
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/service"
 	"github.com/gofiber/fiber/v2"
 )
 
-type webhookHandler struct{}
+type webhookHandler struct {
+	webhookService service.IWebhookService
+}
 
 func (wh *webhookHandler) ReceiveInvoice(c *fiber.Ctx) error {
-	fmt.Println(string(c.Body()))
+	var request dto.XenditInvoiceRequest
+	err := c.BodyParser(&request)
+	if err != nil {
+		return c.SendStatus(http.StatusBadRequest)
+	}
+
+	err = wh.webhookService.ReceiveInvoice(c.UserContext(), &request)
+	if err != nil {
+		log.Println(err)
+		return c.SendStatus(http.StatusInternalServerError)
+	}
+
 	return c.SendStatus(http.StatusOK)
 }
 
