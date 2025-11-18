@@ -15,6 +15,7 @@ type IOrderRepository interface {
 	CreateOrder(ctx context.Context, order *entity.Order) error
 	UpdateNumbering(ctx context.Context, numbering *entity.Numbering) error
 	CreateOrderItem(ctx context.Context, orderItem *entity.OrderItem) error
+	GetOrderById(ctx context.Context, orderId string) (*entity.Order, error)
 }
 
 type orderRepository struct {
@@ -127,6 +128,32 @@ func (or *orderRepository) CreateOrderItem(ctx context.Context, orderItem *entit
 	}
 
 	return nil
+}
+
+func (or *orderRepository) GetOrderById(ctx context.Context, orderId string) (*entity.Order, error) {
+	row := or.db.QueryRowContext(
+		ctx,
+		"SELECT id FROM \"order\" WHERE id = $1 AND is_deleted = false",
+		orderId,
+	)
+
+	if row.Err() != nil {
+		return nil, row.Err()
+	}
+
+	var order entity.Order
+	err := row.Scan(
+		&order.Id,
+	)
+
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) { //?jika error tidak ditemukan
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &order, nil
 }
 
 func NewOrderRepository(db database.DatabaseQuery) IOrderRepository {

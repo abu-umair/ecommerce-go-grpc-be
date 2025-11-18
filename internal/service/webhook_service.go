@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/dto"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
@@ -17,6 +18,13 @@ type webhookService struct {
 
 func (ws *webhookService) ReceiveInvoice(ctx context.Context, request *dto.XenditInvoiceRequest) error {
 	//* find order di db
+	orderEntity, err := ws.orderRepositoru.GetOrderById(ctx, request.ExternalID)
+	if err != nil {
+		return err
+	}
+	if orderEntity == nil {
+		return errors.New("order not found")
+	}
 
 	//* update entity
 
