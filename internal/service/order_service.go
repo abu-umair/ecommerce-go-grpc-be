@@ -20,6 +20,7 @@ import (
 
 type IOrderService interface {
 	CreateOrder(ctx context.Context, request *order.CreateOrderRequest) (*order.CreateOrderResponse, error)
+	ListOrderAdmin(ctx context.Context, request *order.ListOrderAdminRequest) (*order.ListOrderAdminResponse, error)
 }
 
 type orderService struct {
@@ -182,6 +183,21 @@ func (os *orderService) CreateOrder(ctx context.Context, request *order.CreateOr
 		Base: utils.SuccessResponse("Created order success"),
 		Id:   orderEntity.Id,
 	}, nil
+}
+
+func (os *orderService) ListOrderAdmin(ctx context.Context, request *order.ListOrderAdminRequest) (*order.ListOrderAdminResponse, error) {
+	//* validasi dulu apakah yang login admin atau bukan
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if claims.Role != entity.UserRoleAdmin {
+		return nil, utils.UnauthenticatedResponse()
+	}
+
+	//*
+	
 }
 
 func NewOrderService(db *sql.DB, orderRepository repository.IOrderRepository, productRepository repository.IProductRepository) IOrderService {
