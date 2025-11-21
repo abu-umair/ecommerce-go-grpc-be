@@ -258,38 +258,40 @@ func (or *orderRepository) GetListOrderAdminPagination(ctx context.Context, pagi
 		orderItemMap[orderEntity.Id] = make([]*entity.OrderItem, 0)
 	}
 
-	idsJoined := strings.Join(ids, ", ")
-	baseOrderItemQuery := fmt.Sprintf("SELECT product_id, product_name, product_price, quantity, order_id FROM order_item WHERE is_deleted = false AND order_id IN(%s)", idsJoined)
-	rows, err = or.db.QueryContext(
-		ctx,
-		baseOrderItemQuery,
-	)
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	for rows.Next() {
-		var item entity.OrderItem
-
-		err = rows.Scan(
-			&item.ProductId,
-			&item.ProductName,
-			&item.ProductPrice,
-			&item.Quantity,
-			&item.OrderId,
+	if len(orders) > 0 {
+		idsJoined := strings.Join(ids, ", ")
+		baseOrderItemQuery := fmt.Sprintf("SELECT product_id, product_name, product_price, quantity, order_id FROM order_item WHERE is_deleted = false AND order_id IN(%s)", idsJoined)
+		rows, err = or.db.QueryContext(
+			ctx,
+			baseOrderItemQuery,
 		)
 
 		if err != nil {
 			return nil, nil, err
 		}
 
-		orderItemMap[item.OrderId] = append(orderItemMap[item.OrderId], &item)
+		for rows.Next() {
+			var item entity.OrderItem
 
-	}
+			err = rows.Scan(
+				&item.ProductId,
+				&item.ProductName,
+				&item.ProductPrice,
+				&item.Quantity,
+				&item.OrderId,
+			)
 
-	for i, o := range orders {
-		orders[i].Items = orderItemMap[o.Id]
+			if err != nil {
+				return nil, nil, err
+			}
+
+			orderItemMap[item.OrderId] = append(orderItemMap[item.OrderId], &item)
+
+		}
+
+		for i, o := range orders {
+			orders[i].Items = orderItemMap[o.Id]
+		}
 	}
 
 	var metadata common.PaginationResponse = common.PaginationResponse{ // ?utk metadata
