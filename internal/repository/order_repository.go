@@ -182,7 +182,7 @@ func (or *orderRepository) UpdateOrder(ctx context.Context, order *entity.Order)
 }
 
 func (or *orderRepository) GetListOrderAdminPagination(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Order, *common.PaginationResponse, error) {
-	//?membuat pagination list order 
+	//?membuat pagination list order
 	row := or.db.QueryRowContext(
 		ctx,
 		"SELECT COUNT(*) FROM \"order\" WHERE is_deleted = false",
@@ -200,9 +200,31 @@ func (or *orderRepository) GetListOrderAdminPagination(ctx context.Context, pagi
 	offset := (pagination.CurrentPage - 1) * pagination.ItemPerPage
 	totalPages := (totalCount + int(pagination.ItemPerPage) - 1) / int(pagination.ItemPerPage)
 
+	// ?membuat sorting
+	allowedSorts := map[string]string{
+		"number":     "number",
+		"customer":   "user_full_name",
+		"total":      "total",
+		"created_at": "created_at",
+	}
+
+	sort := "ORDER BY created_at DESC"
+	if pagination.Sort != nil {
+		direction := "ASC" //?dfaultnya ASC
+		sortField, ok := allowedSorts[pagination.Sort.Field]
+		if ok {
+			if pagination.Sort.Direction == "desc" {
+				direction = "DESC"
+			}
+
+			sort = fmt.Sprintf("ORDER BY %s %s", sortField, direction)
+		}
+	}
+
+	baseQuery := fmt.Sprintf("SELECT id, number, order_status_code, total, user_full_name, created_at FROM \"order\" WHERE is_deleted = false %s LIMIT $1 OFFSET $2", sort)
 	rows, err := or.db.QueryContext(
 		ctx,
-		"SELECT id, number, order_status_code, total, user_full_name, created_at FROM \"order\" WHERE is_deleted = false LIMIT $1 OFFSET $2",
+		baseQuery,
 		pagination.ItemPerPage, //?item per page yang diinputkan
 		offset,
 	)
