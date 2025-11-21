@@ -182,16 +182,36 @@ func (or *orderRepository) UpdateOrder(ctx context.Context, order *entity.Order)
 }
 
 func (or *orderRepository) GetListOrderAdminPagination(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Order, *common.PaginationResponse, error) {
+	//?membuat pagination list order 
+	row := or.db.QueryRowContext(
+		ctx,
+		"SELECT COUNT(*) FROM \"order\" WHERE is_deleted = false",
+	)
+	if row.Err() != nil {
+		return nil, nil, row.Err()
+	}
+
+	var totalCount int
+	err := row.Scan(&totalCount)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	offset := (pagination.CurrentPage - 1) * pagination.ItemPerPage
+	totalPages := (totalCount + int(pagination.ItemPerPage) - 1) / int(pagination.ItemPerPage)
+
 	rows, err := or.db.QueryContext(
 		ctx,
-		"SELECT id, number, order_status_code, total, user_full_name, created_at FROM \"order\" WHERE is_deleted = false LIMIT 10 OFFSET 1",
+		"SELECT id, number, order_status_code, total, user_full_name, created_at FROM \"order\" WHERE is_deleted = false LIMIT $1 OFFSET $2",
+		pagination.ItemPerPage, //?item per page yang diinputkan
+		offset,
 	)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	orders := make([]*entity.Order, 0)
-	ids := make([]string, 0) //?menyimpan id order dalam bentuk array
+	ids := make([]string, 0)                             //?menyimpan id order dalam bentuk array
 	orderItemMap := make(map[string][]*entity.OrderItem) //?menyimpan item order dalam bentuk map
 	for rows.Next() {
 		var orderEntity entity.Order
@@ -248,7 +268,14 @@ func (or *orderRepository) GetListOrderAdminPagination(ctx context.Context, pagi
 		orders[i].Items = orderItemMap[o.Id]
 	}
 
-	return orders, nil, nil
+	var metadata common.PaginationResponse = common.PaginationResponse{ // ?utk metadata
+		CurrentPage:    pagination.CurrentPage,
+		TotalPageCount: int32(totalPages),
+		ItemPerPage:    pagination.ItemPerPage,
+		TotalItemCount: int32(totalCount),
+	}
+
+	return orders, &metadata, nil
 }
 
 func NewOrderRepository(db database.DatabaseQuery) IOrderRepository {
