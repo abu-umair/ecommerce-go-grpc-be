@@ -16,6 +16,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/xendit/xendit-go"
 	"github.com/xendit/xendit-go/invoice"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type IOrderService interface {
@@ -196,8 +197,40 @@ func (os *orderService) ListOrderAdmin(ctx context.Context, request *order.ListO
 		return nil, utils.UnauthenticatedResponse()
 	}
 
-	//*
-	
+	//* mengambil query semua order
+	orders, metadata, err := os.orderRepository.GetListOrderAdminPagination(ctx, request.Pagination)
+	if err != nil {
+		return nil, err
+	}
+
+	items := make([]*order.ListOrderAdminResponseItem, 0)
+	for _, o := range orders {
+
+		products := make([]*order.ListOrderAdminResponseItemProduct, 0)
+		for _, oi := range o.Items {
+			products = append(products, &order.ListOrderAdminResponseItemProduct{
+				Id:       oi.ProductId,
+				Name:     oi.ProductName,
+				Price:    oi.ProductPrice,
+				Quantity: oi.Quantity,
+			})
+		}
+		items = append(items, &order.ListOrderAdminResponseItem{
+			Id:         o.Id,
+			Number:     o.Number,
+			Customer:   o.UserFullName,
+			StatusCode: o.OrderStatusCode,
+			Total:      o.Total,
+			CreatedAt:  timestamppb.New(o.CreatedAt),
+			Products:   products,
+		})
+	}
+
+	return &order.ListOrderAdminResponse{
+		Base:       utils.SuccessResponse("List order success"),
+		Pagination: metadata,
+		Items:      items,
+	}, nil
 }
 
 func NewOrderService(db *sql.DB, orderRepository repository.IOrderRepository, productRepository repository.IProductRepository) IOrderService {

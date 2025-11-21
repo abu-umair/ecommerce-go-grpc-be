@@ -4,8 +4,11 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
+	"github.com/abu-umair/ecommerce-go-grpc-be/pb/common"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
 )
 
@@ -17,6 +20,7 @@ type IOrderRepository interface {
 	CreateOrderItem(ctx context.Context, orderItem *entity.OrderItem) error
 	GetOrderById(ctx context.Context, orderId string) (*entity.Order, error)
 	UpdateOrder(ctx context.Context, order *entity.Order) error
+	GetListOrderAdminPagination(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Order, *common.PaginationResponse, error)
 }
 
 type orderRepository struct {
@@ -175,6 +179,76 @@ func (or *orderRepository) UpdateOrder(ctx context.Context, order *entity.Order)
 	}
 
 	return nil
+}
+
+func (or *orderRepository) GetListOrderAdminPagination(ctx context.Context, pagination *common.PaginationRequest) ([]*entity.Order, *common.PaginationResponse, error) {
+	rows, err := or.db.QueryContext(
+		ctx,
+		"SELECT id, number, order_status_code, total, user_full_name, created_at FROM \"order\" WHERE is_deleted = false LIMIT 10 OFFSET 1",
+	)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	orders := make([]*entity.Order, 0)
+	ids := make([]string, 0) //?menyimpan id order dalam bentuk array
+	orderItemMap := make(map[string][]*entity.OrderItem) //?menyimpan item order dalam bentuk map
+	for rows.Next() {
+		var orderEntity entity.Order
+
+		err = rows.Scan(
+			&orderEntity.Id,
+			&orderEntity.Number,
+			&orderEntity.OrderStatusCode,
+			&orderEntity.Total,
+			&orderEntity.UserFullName,
+			&orderEntity.CreatedAt,
+		)
+
+		if err != nil {
+			return nil, nil, err
+		}
+
+		orders = append(orders, &orderEntity)
+		ids = append(ids, fmt.Sprintf("'%s'", orderEntity.Id))
+		orderItemMap[orderEntity.Id] = make([]*entity.OrderItem, 0)
+	}
+
+	idsJoined := strings.Join(ids, ", ")
+	baseOrderItemQuery := fmt.Sprintf("SELECT product_id, product_name, product_price, quantity, order_id FROM order_item WHERE is_deleted = false AND order_id IN(%s)", idsJoined)
+	rows, err = or.db.QueryContext(
+		ctx,
+		baseOrderItemQuery,
+	)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	for rows.Next() {
+		var item entity.OrderItem
+
+		err = rows.Scan(
+			&item.ProductId,
+			&item.ProductName,
+			&item.ProductPrice,
+			&item.Quantity,
+			&item.OrderId,
+		)
+
+		if err != nil {
+			return nil, nil, err
+		}
+
+		orderItemMap[item.OrderId] = append(orderItemMap[item.OrderId], &item)
+
+	}
+
+	for i, o := range orders {
+		orders[i].Items = orderItemMap[o.Id]
+	}
+
+	return orders, nil, nil
 }
 
 func NewOrderRepository(db database.DatabaseQuery) IOrderRepository {
