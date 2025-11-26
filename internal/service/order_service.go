@@ -23,6 +23,7 @@ type IOrderService interface {
 	CreateOrder(ctx context.Context, request *order.CreateOrderRequest) (*order.CreateOrderResponse, error)
 	ListOrderAdmin(ctx context.Context, request *order.ListOrderAdminRequest) (*order.ListOrderAdminResponse, error)
 	ListOrder(ctx context.Context, request *order.ListOrderRequest) (*order.ListOrderResponse, error)
+	DetailOrder(ctx context.Context, request *order.DetailOrderRequest) (*order.DetailOrderResponse, error)
 }
 
 type orderService struct {
@@ -293,6 +294,68 @@ func (os *orderService) ListOrder(ctx context.Context, request *order.ListOrderR
 		Pagination: metadata,
 		Items:      items,
 	}, nil
+}
+
+func (os *orderService) DetailOrder(ctx context.Context, request *order.DetailOrderRequest) (*order.DetailOrderResponse, error) {
+	//* apakah yang login admin atau bukan
+	claims, err := jwtentity.GetClaimsFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	//? ambil order berdasarkan requst id
+	orderEntity, err := os.orderRepository.GetOrderById(ctx, request.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	//? validasi role
+	if claims.Role != entity.UserRoleAdmin && claims.Subject != orderEntity.UserId {
+		return &order.DetailOrderResponse{
+			Base: utils.BadRequestResponse("User id is not mathced"),
+		}, nil
+	}
+
+	notes := ""
+	if orderEntity.Notes != nil {
+		notes = *orderEntity.Notes
+	}
+
+	XenditInvoiceUrl := ""
+	if orderEntity.XenditInvoiceUrl != nil {
+		XenditInvoiceUrl = *orderEntity.XenditInvoiceUrl
+	}
+
+	// ?ngambil dari func listOrder, diganti variablenya saja
+	orderStatusCode := orderEntity.OrderStatusCode
+	if orderEntity.OrderStatusCode == entity.OrderStatusCodeUnpaid && time.Now().After(*orderEntity.ExpiredAt) {
+		orderStatusCode = entity.OrderStatusCodeExpired
+	}
+
+	items := make([]*order.DetailOrderResponseItem, 0)
+	for _, oi := range orderEntity.Items {
+		items = append(items, &order.DetailOrderResponseItem{
+			Id:       oi.ProductId,
+			Name:     oi.ProductName,
+			Price:    oi.ProductPrice,
+			Quantity: oi.Quantity,
+		})
+	}
+
+	return &order.DetailOrderResponse{
+		Base:             utils.SuccessResponse("Get order detail success"),
+		Id:               orderEntity.Id,
+		Number:           orderEntity.Number,
+		UserFullName:     orderEntity.UserFullName,
+		Address:          orderEntity.Address,
+		PhoneNumber:      orderEntity.PhoneNumber,
+		Notes:            notes,
+		OrderStatusCode:  orderStatusCode,
+		CreatedAt:        timestamppb.New(orderEntity.CreatedAt),
+		XenditInvoiceUrl: XenditInvoiceUrl,
+		Items:            items,
+	}, nil
+
 }
 
 func NewOrderService(db *sql.DB, orderRepository repository.IOrderRepository, productRepository repository.IProductRepository) IOrderService {
