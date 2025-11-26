@@ -525,3 +525,14 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative order/order.proto
 ```
+
+
+### API Update Status Order
+#### History Steps
+Alur logic pada status order:
+```bash
+unpaid -> paid (admin)
+unpaid -> canceled (admin & user)
+paid -> shipping (admin)
+shipping -> done (admin & user)
+```
