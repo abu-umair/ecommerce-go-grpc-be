@@ -139,7 +139,7 @@ func (or *orderRepository) CreateOrderItem(ctx context.Context, orderItem *entit
 func (or *orderRepository) GetOrderById(ctx context.Context, orderId string) (*entity.Order, error) {
 	row := or.db.QueryRowContext(
 		ctx,
-		"SELECT id,number,user_full_name,address,phone_number,notes,order_status_code,created_at,xendit_invoice_url,user_id,expired_at  FROM \"order\" WHERE id = $1 AND is_deleted = false",
+		"SELECT id,number,user_full_name,address,phone_number,notes,order_status_code,total,created_at,xendit_invoice_url,user_id,expired_at  FROM \"order\" WHERE id = $1 AND is_deleted = false",
 		orderId,
 	)
 
@@ -156,6 +156,7 @@ func (or *orderRepository) GetOrderById(ctx context.Context, orderId string) (*e
 		&order.PhoneNumber,
 		&order.Notes,
 		&order.OrderStatusCode,
+		&order.Total,
 		&order.CreatedAt,
 		&order.XenditInvoiceUrl,
 		&order.UserId,

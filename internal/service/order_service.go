@@ -354,6 +354,8 @@ func (os *orderService) DetailOrder(ctx context.Context, request *order.DetailOr
 		CreatedAt:        timestamppb.New(orderEntity.CreatedAt),
 		XenditInvoiceUrl: XenditInvoiceUrl,
 		Items:            items,
+		Total:            orderEntity.Total,
+		ExpiredAt:        timestamppb.New(*orderEntity.ExpiredAt),
 	}, nil
 
 }
