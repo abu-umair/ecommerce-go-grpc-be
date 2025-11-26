@@ -286,9 +286,28 @@ func (repo *productRepository) GetProductPaginationAdmin(ctx context.Context, pa
 
 func (repo *productRepository) GetProductHighlight(ctx context.Context) ([]*entity.Product, error) {
 
+	//* mencari product yang sering di checkout cust 
 	rows, err := repo.db.QueryContext(
 		ctx,
-		"SELECT id, name, description, price, image_file_name FROM product WHERE is_deleted = false ORDER BY created_at DESC LIMIT 3", //?mengambil 3 data terbaru untuk highlight
+		`
+		SELECT 
+			id,
+			name,
+			description,
+			price,
+			image_file_name
+		FROM 
+		product
+		WHERE
+			id IN(
+				SELECT 
+					p.id
+					FROM product p
+					JOIN order_item oi on oi.product_id = p.id
+					WHERE p.is_deleted = false and oi.is_deleted = false
+					GROUP BY p.id ORDER BY count(*) DESC
+				LIMIT 3
+			);`, //?mengambil 3 data terbaru untuk highlight
 	)
 	if err != nil {
 		return nil, err
