@@ -517,7 +517,7 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 
 ### API Detail Order 
 #### History Steps
-1. Generate order.proto
+1. Generate newsletter.proto
 ```bash
 protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative order/order.proto
 ```
@@ -553,3 +553,7 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 ## E-Commerce Project - Newsletter
 ### API Newsletter
 #### History Steps
+1. Generate newsletter.proto
+```bash
+protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=source_relative --go-grpc_opt=paths=source_relative newsletter/newsletter.proto
+```
