@@ -22,6 +22,7 @@ var publicApis = map[string]bool{
 	"/product.ProductService/DetailProduct":     true,
 	"/product.ProductService/ListProduct":       true,
 	"/product.ProductService/HighlightProducts": true,
+	"/newsletter.NewsletterService/SubcribeNewsletter": true,
 }
 
 func (am *authMiddleware) Middleware(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
