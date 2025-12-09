@@ -2,10 +2,13 @@ package service
 
 import (
 	"context"
+	"time"
 
+	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/newsletter"
+	"github.com/google/uuid"
 )
 
 type InewsLetterService interface {
@@ -29,8 +32,22 @@ func (ns *newsletterService) SubcribeNewsletter(ctx context.Context, request *ne
 		}, nil
 	}
 
-	
 	//* insert ke db (jika email belum terdaftar)
+	newNewsletterEntity := entity.Newsletter{
+		Id:        uuid.NewString(),
+		Fullname:  request.FullName,
+		Email:     request.Email,
+		CreatedAt: time.Now(),
+		CreatedBy: "Public",
+	}
+
+	err = ns.newsletterRepository.CreateNewNewsletter(ctx, &newNewsletterEntity)
+	if err != nil {
+		return nil, err
+	}
+	return &newsletter.SubcribeNewsletterResponse{
+		Base: utils.SuccessResponse("Subcribe newsletter success"),
+	}, nil
 
 }
 
