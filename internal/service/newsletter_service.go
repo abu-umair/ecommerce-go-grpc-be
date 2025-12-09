@@ -2,13 +2,9 @@ package service
 
 import (
 	"context"
-	"time"
 
-	"github.com/abu-umair/ecommerce-go-grpc-be/internal/entity"
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/repository"
-	"github.com/abu-umair/ecommerce-go-grpc-be/internal/utils"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/newsletter"
-	"github.com/google/uuid"
 )
 
 type InewsLetterService interface {
@@ -16,18 +12,18 @@ type InewsLetterService interface {
 }
 
 type newsletterService struct {
+	newsletterRepository repository.InewsLetterRepository
 }
 
 func (ns *newsletterService) SubcribeNewsletter(ctx context.Context, request *newsletter.SubcribeNewsletterRequest) (*newsletter.SubcribeNewsletterResponse, error) {
 	//* cek database, apakah email sudah ada/terdaftar atau belum (jika Sudah terdaftar maka return success dan tidak disimpan di DB)
-	
 
 	//* insert ke db (jika email belum terdaftar)
-	
+
 }
 
-func NewNewsLetterService(newsletterRepository repository.InewsLetterRepository) InewsLetterService {
+func NewNewsLetterService(newsletterRepository repository.InewsLetterRepository) InewsLetterService { //?newsletterRepository (dari `type newsletterService struct`)
 	return &newsletterService{
-		newsletterRepository: newsletterRepository,
+		newsletterRepository: newsletterRepository, //?diisi dari repository (dari `type newsletterService struct`)
 	}
 }
