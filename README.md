@@ -548,3 +548,8 @@ protoc --go_out=./pb --go-grpc_out=./pb --proto_path=./proto --go_opt=paths=sour
 
 ### Integrasi API Create Order / Checkout
 #### History Steps
+
+
+## E-Commerce Project - Newsletter
+### API Newsletter
+#### History Steps
