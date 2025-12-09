@@ -13,6 +13,7 @@ import (
 	"github.com/abu-umair/ecommerce-go-grpc-be/internal/service"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/auth"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/cart"
+	"github.com/abu-umair/ecommerce-go-grpc-be/pb/newsletter"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/order"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pb/product"
 	"github.com/abu-umair/ecommerce-go-grpc-be/pkg/database"
@@ -57,6 +58,10 @@ func main() { //?Sebagai gRpc server
 	orderService := service.NewOrderService(db, orderRepository, productRepository)
 	orderHandler := handler.NewOrderHandler(orderService)
 
+	newsletterRepository := repository.NewNewsLetterRespository((db))
+	newsletterService := service.NewNewsLetterService(newsletterRepository)
+	newsletterHandler := handler.NewNewsletterHandler(newsletterService)
+
 	serv := grpc.NewServer(
 
 		grpc.ChainUnaryInterceptor(
@@ -69,6 +74,7 @@ func main() { //?Sebagai gRpc server
 	product.RegisterProductServiceServer(serv, productHandler)
 	cart.RegisterCartServiceServer(serv, cartHandler)
 	order.RegisterOrderServiceServer(serv, orderHandler)
+	newsletter.RegisterNewsletterServiceServer(serv, newsletterHandler)
 
 	if os.Getenv("ENVIRONMENT") == "dev" {
 		reflection.Register(serv)
